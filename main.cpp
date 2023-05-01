@@ -1,6 +1,8 @@
 #include <iostream>
+#include "CsvData.h"
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    CsvData c("aiueo");
+
     return 0;
 }
