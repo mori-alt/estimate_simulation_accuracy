@@ -36,16 +36,20 @@ public:
             lines.push_back(str);
         }
 
-        //　ヘッダ行の標準出力
-        std::cout << lines.size() << std::endl;
-        for(int i = 0; i < 7; i++){
-            std::cout << lines[i] << std::endl;
-        }
-
-        // eye posの格納
+        // メンバ変数を格納
         for(int i = 0; i < eye_pos_.size(); i++){
             eye_pos_[i] = std::stod(split(lines[0], ',')[i + 1]);
         }
+
+        for(int i = 0; i < look_at_.size(); i++){
+            look_at_[i] = std::stod(split(lines[1], ',')[i + 1]);
+        }
+
+        dist_to_look_at_ = std::stod(split(lines[2], ',')[1]);
+        camera_theta_ = std::stod(split(lines[3], ',')[1]);
+        camera_phi_ = std::stod(split(lines[4], ',')[1]);
+        camera_psi_ = std::stod(split(lines[5], ',')[1]);
+        omega_ = std::stod(split(lines[6], ',')[1]);
 
         file.close();
     }
@@ -62,6 +66,9 @@ public:
         }
         return result;
     }
+
+
+
 
     std::string getFilePath() const {
         return file_path_;
