@@ -50,14 +50,6 @@ public:
         file.close();
     }
 
-    std::string getFilePath() const {
-        return file_path_;
-    }
-
-    std::array<double, 3> getEyePos() const {
-        return eye_pos_;
-    }
-
     // csv読み込むとき用のカンマ区切り関数
     std::vector<std::string> split(const std::string& input, char delimiter)
     {
@@ -69,6 +61,70 @@ public:
             result.push_back(field);
         }
         return result;
+    }
+
+    std::string getFilePath() const {
+        return file_path_;
+    }
+
+    void setFilePath(const std::string &filePath) {
+        file_path_ = filePath;
+    }
+
+    const std::array<double, 3> &getEyePos() const {
+        return eye_pos_;
+    }
+
+    void setEyePos(const std::array<double, 3> &eyePos) {
+        eye_pos_ = eyePos;
+    }
+
+    const std::array<double, 3> &getLookAt() const {
+        return look_at_;
+    }
+
+    void setLookAt(const std::array<double, 3> &lookAt) {
+        look_at_ = lookAt;
+    }
+
+    double getDistToLookAt() const {
+        return dist_to_look_at_;
+    }
+
+    void setDistToLookAt(double distToLookAt) {
+        dist_to_look_at_ = distToLookAt;
+    }
+
+    double getCameraTheta() const {
+        return camera_theta_;
+    }
+
+    void setCameraTheta(double cameraTheta) {
+        camera_theta_ = cameraTheta;
+    }
+
+    double getCameraPhi() const {
+        return camera_phi_;
+    }
+
+    void setCameraPhi(double cameraPhi) {
+        camera_phi_ = cameraPhi;
+    }
+
+    double getCameraPsi() const {
+        return camera_psi_;
+    }
+
+    void setCameraPsi(double cameraPsi) {
+        camera_psi_ = cameraPsi;
+    }
+
+    double getOmega() const {
+        return omega_;
+    }
+
+    void setOmega(double omega) {
+        omega_ = omega;
     }
 };
 
