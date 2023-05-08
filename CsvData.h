@@ -19,10 +19,14 @@ public:
         file_path_ = csv_path;
         std::cout << file_path_ << std::endl;
         std::ifstream file(file_path_, std::ios::in);
-        if (!file.is_open()) {
+        if (!file.is_open()) {  // ちゃんと拾うかは置いといて失敗したらエラー投げさせる
             throw std::runtime_error("file cannot be opened");
         }
 
+    }
+
+    std::string getFilePath() const {
+        return file_path_;
     }
 };
 
