@@ -55,12 +55,13 @@ public:
         header_ = split(lines[7], ',');
 
         // csv各データの格納
-        // string 型で文字列格納
+        // string 型で文字列格納 一文から分離する
         std::vector<std::vector<std::string>> string_data;
         for(int i = 8; i < lines.size(); i++){
             string_data.push_back(split(lines[i], ','));
         }
 
+        // 分離した文字列を数値型に書き換える
         for(int i = 0; i < string_data.size(); i++){
             std::vector<double> double_value;
             for(int j = 0; j < 2+5*75; j++){
