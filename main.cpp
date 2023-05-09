@@ -1,5 +1,6 @@
 #include <iostream>
 #include <filesystem>
+#include <Eigen/Dense>
 #include "CsvData.h"
 
 int main() {
