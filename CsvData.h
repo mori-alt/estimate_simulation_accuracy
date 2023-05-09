@@ -53,6 +53,7 @@ public:
         camera_psi_ = std::stod(split(lines[5], ',')[1]);
         omega_ = std::stod(split(lines[6], ',')[1]);
         header_ = split(lines[7], ',');
+        header_.erase(header_.end() - 1); // 末尾余計にカウントしてしまうので削除しておく
 
         // csv各データの格納
         // string 型で文字列格納 一文から分離する
@@ -60,6 +61,7 @@ public:
         for(int i = 8; i < lines.size(); i++){
             string_data.push_back(split(lines[i], ','));
         }
+
 
         // 分離した文字列を数値型に書き換える
         for(int i = 0; i < string_data.size(); i++){
