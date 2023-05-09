@@ -21,9 +21,16 @@ int main() {
     std::cout << csv.getCameraPsi() << std::endl;
     std::cout << csv.getOmega() << std::endl;
 
+    std::cout << csv.getHeader().size() << std::endl;
+
+    for(int i = 0; i < csv.getHeader().size(); i++){
+        std::cout << i << " : " << csv.getHeader()[i] << std::endl;
+    }
+
     std::cout << csv.getData().size() << std::endl;
-    std::cout << csv.getData()[0] << std::endl;
-    std::cout << csv.getData()[1] << std::endl;
+    std::cout << csv.getData()[0].size() << std::endl;
+    std::cout << csv.getData()[0][0] << std::endl;
+    std::cout << csv.getData()[1][1] << std::endl;
 
 
     return 0;

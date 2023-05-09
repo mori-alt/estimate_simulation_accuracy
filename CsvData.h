@@ -20,7 +20,8 @@ private:
     double camera_phi_;
     double camera_psi_;
     double omega_;
-    std::vector<std::string> data_;
+    std::vector<std::string> header_;
+    std::vector<std::vector<double>> data_;
 
 public:
     CsvData(std::string csv_path) {
@@ -51,9 +52,21 @@ public:
         camera_phi_ = std::stod(split(lines[4], ',')[1]);
         camera_psi_ = std::stod(split(lines[5], ',')[1]);
         omega_ = std::stod(split(lines[6], ',')[1]);
+        header_ = split(lines[7], ',');
 
-        for(int i = 7; i < lines.size(); i++){
-            data_.push_back(lines[i]);
+        // csv各データの格納
+        // string 型で文字列格納
+        std::vector<std::vector<std::string>> string_data;
+        for(int i = 8; i < lines.size(); i++){
+            string_data.push_back(split(lines[i], ','));
+        }
+
+        for(int i = 0; i < string_data.size(); i++){
+            std::vector<double> double_value;
+            for(int j = 0; j < 2+5*75; j++){
+                double_value.push_back(std::stod(string_data[i][j]));
+            }
+            data_.push_back(double_value);
         }
 
         file.close();
@@ -136,11 +149,19 @@ public:
         omega_ = omega;
     }
 
-    const std::vector<std::string> &getData() const {
+    const std::vector<std::string> &getHeader() const {
+        return header_;
+    }
+
+    void setHeader(std::vector<std::string> header) {
+        header_ = header;
+    }
+
+    const std::vector<std::vector<double>> &getData() const {
         return data_;
     }
 
-    void setData(std::vector<std::string> data) {
+    void setData(std::vector<std::vector<double>> data) {
         data_ = data;
     }
 };
