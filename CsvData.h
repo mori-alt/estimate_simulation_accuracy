@@ -20,6 +20,7 @@ private:
     double camera_phi_;
     double camera_psi_;
     double omega_;
+    std::vector<std::string> data_;
 
 public:
     CsvData(std::string csv_path) {
@@ -51,6 +52,10 @@ public:
         camera_psi_ = std::stod(split(lines[5], ',')[1]);
         omega_ = std::stod(split(lines[6], ',')[1]);
 
+        for(int i = 7; i < lines.size(); i++){
+            data_.push_back(lines[i]);
+        }
+
         file.close();
     }
 
@@ -66,9 +71,6 @@ public:
         }
         return result;
     }
-
-
-
 
     std::string getFilePath() const {
         return file_path_;
@@ -132,6 +134,14 @@ public:
 
     void setOmega(double omega) {
         omega_ = omega;
+    }
+
+    const std::vector<std::string> &getData() const {
+        return data_;
+    }
+
+    void setData(std::vector<std::string> data) {
+        data_ = data;
     }
 };
 
