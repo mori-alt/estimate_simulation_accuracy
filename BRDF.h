@@ -9,6 +9,7 @@
 #include <EIgen/Dense>
 #include <cmath>
 #include "CsvData.h"
+#include "random/random.h"
 
 class BRDF{
 private:
@@ -43,6 +44,21 @@ public:
         const auto iota_x2 = factor * _integral_x2_ * c;
 
         return k * k * ( iota_x1 * std::conj(iota_x2) ).real() / ( 4.0 * M_PI * M_PI * c * c * in_dl.y() * in_dv.y() );
+    }
+
+//    繰り返し処理の計算
+    double estimate_brdf(const int loop_freq, const double in_wavelength, const Eigen::Vector2d& in_random_st, const Eigen::Vector3d& dl, const Eigen::Vector3d& dv, const double amplitude, const double pitch){
+        auto total_brdf_value = 0.0;
+#pragma omp parallel for
+        for(int i = 0; i < loop_freq; i++){
+            Eigen::Vector2d brdf_st;
+            brdf_st << randomMT(), randomMT();
+            const auto brdf_value = eval_sinusoidal_brdf(in_wavelength, brdf_st, dl, dv, amplitude, pitch);
+            total_brdf_value += brdf_value;
+        }
+        auto brdf = total_brdf_value / loop_freq;
+
+        return brdf;
     }
 
     const CsvData &getCsvData() const {
