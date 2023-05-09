@@ -24,6 +24,9 @@ private:
     std::vector<std::vector<double>> data_;
 
 public:
+    CsvData(){
+
+    }
     CsvData(std::string csv_path) {
         file_path_ = csv_path;
         std::ifstream file(file_path_, std::ios::in);
