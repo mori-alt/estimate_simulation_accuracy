@@ -10,37 +10,102 @@
 #include <cmath>
 #include "CsvData.h"
 #include "random/random.h"
+#include "Scene.h"
 
 // fixme なんかcmathの定数が呼び出せないからごり押し解決
 const double M_PI = 3.141592653589793;
 
+class Light{
+private:
+    double wavelength_;
+    Eigen::Vector3d dl_;
 
-struct Light{ // 光源情報はまだ仮でおくだけだから適当に定義すること
-    double wavelength;
-    Eigen::Vector3d dl;
+public:
+    Light(){
+
+    }
+
+    Light(double wavelength, const Eigen::Vector3d& dl){
+        wavelength_ = wavelength;
+        dl_ = dl.normalized();
+    }
+
+    double getWavelength() const {
+        return wavelength_;
+    }
+
+    void setWavelength(double wavelength) {
+        wavelength_ = wavelength;
+    }
+
+    const Eigen::Vector3d &getDl() const {
+        return dl_;
+    }
+
+    void setDl(const Eigen::Vector3d &dl) {
+        dl_ = dl;
+    }
 };
 
-struct SurfaceGeometry{
-    double amplitude;  // pdf出力の一番右の値にすればいい気がする（深さなので
-    double pitch;  // 傷の付け方が直線的で，結局sinになっているけど詳しいこと分からないら適当に作ること
-    Eigen::Vector3d dv; // カメラの方向にあたる
-};
+class SurfaceGeometry{
+private:
+    double amplitude_;  // pdf出力の一番右の値にすればいい気がする（深さなので
+    double pitch_;  // 傷の付け方が直線的で，結局sinになっているけど詳しいこと分からないら適当に作ること
+    Eigen::Vector3d dv_; // カメラの方向にあたる
 
-struct Scene{
-    SurfaceGeometry geo; // pitchだけ自分で決めるけどそれ以外はcsvから取ること
-    Light light; // 自前で決めること
+public:
+    SurfaceGeometry(){
+
+    }
+
+    SurfaceGeometry(double amplitude, double pitch, Eigen::Vector3d dv){
+        amplitude_ = amplitude;
+        pitch_ = pitch;
+        dv_ = dv.normalized();
+    }
+
+    double getAmplitude() const {
+        return amplitude_;
+    }
+
+    void setAmplitude(double amplitude) {
+        amplitude_ = amplitude;
+    }
+
+    double getPitch() const {
+        return pitch_;
+    }
+
+    void setPitch(double pitch) {
+        pitch_ = pitch;
+    }
+
+    const Eigen::Vector3d &getDv() const {
+        return dv_;
+    }
+
+    void setDv(const Eigen::Vector3d &dv) {
+        dv_ = dv;
+    }
 };
 
 class BRDF{
 private:
     CsvData csv_;
-    Scene scene_;
+    Light light_;
+    SurfaceGeometry geo_;
 
 
 public:
     // 必要な情報はここで読むこと
     BRDF(CsvData csv){
         csv_ = csv;
+
+        // 光源情報の作成
+        Light light{375, {0, 1, 1}};
+        light_ = light;
+
+
     }
 
     double eval_sinusoidal_brdf( const Eigen::Vector2d& in_random_st )
@@ -48,12 +113,12 @@ public:
         using namespace std::complex_literals;
 
         const float g_c = 50.0; //[um]  表面構造の一辺の長さ
-        const auto k = 2.0 * M_PI / (scene_.light.wavelength * 1.0e-9);
-        const auto A = scene_.geo.amplitude * 1.0e-9;
-        const auto L = scene_.geo.pitch * 1.0e-9;
+        const auto k = 2.0 * M_PI / (light_.getWavelength() * 1.0e-9);
+        const auto A = geo_.getAmplitude() * 1.0e-9;
+        const auto L = geo_.getPitch() * 1.0e-9;
         const auto c = g_c * 1.0e-6;
 
-        const Eigen::Vector3d dh_bar = 0.5 * (scene_.light.dl + scene_.geo.dv);
+        const Eigen::Vector3d dh_bar = 0.5 * (light_.getDl() + geo_.getDv());
 
         const auto factor = ( dh_bar.z() == 0.0 ) ? c : ( std::exp( k * c * dh_bar.z() * 1.0i ) - std::exp( -k * c * dh_bar.z() * 1.0i ) ) / ( 2.0i * k * dh_bar.z() );
 
@@ -65,7 +130,7 @@ public:
         const auto iota_x1 = factor * _integral_x1_ * c;
         const auto iota_x2 = factor * _integral_x2_ * c;
 
-        return k * k * ( iota_x1 * std::conj(iota_x2) ).real() / ( 4.0 * M_PI * M_PI * c * c * scene_.light.dl.y() * scene_.geo.dv.y() );
+        return k * k * ( iota_x1 * std::conj(iota_x2) ).real() / ( 4.0 * M_PI * M_PI * c * c * light_.getDl().y() * geo_.getDv().y() );
     }
 
 //    繰り返し処理の計算
@@ -83,16 +148,28 @@ public:
         return brdf;
     }
 
-    const CsvData &getCsvData() const {
+    const CsvData &getCsv() const {
         return csv_;
     }
 
-    void setCsvData(CsvData csv){
+    void setCsv(const CsvData &csv) {
         csv_ = csv;
     }
 
-    const Scene &getScene() const {
-        return scene_;
+    const Light &getLight() const {
+        return light_;
+    }
+
+    void setLight(const Light &light) {
+        light_ = light;
+    }
+
+    const SurfaceGeometry &getGeo() const {
+        return geo_;
+    }
+
+    void setGeo(const SurfaceGeometry &geo) {
+        geo_ = geo;
     }
 
 };
