@@ -10,7 +10,6 @@
 #include <cmath>
 #include "CsvData.h"
 #include "random/random.h"
-#include "Scene.h"
 
 // fixme なんかcmathの定数が呼び出せないからごり押し解決
 const double M_PI = 3.141592653589793;
