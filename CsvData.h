@@ -40,6 +40,8 @@ private:
     double omega_;
     std::vector<std::string> header_;
     std::vector<std::vector<double>> data_;
+    std::vector<double> time_;
+    std::vector<double> rot_angle_;
 
 public:
     CsvData(){
@@ -93,9 +95,11 @@ public:
             data_.push_back(double_value);
         }
 
+        time_ = read_column(0);
+        rot_angle_ = read_column(1);
+
         file.close();
     }
-
 
     // csvデータの縦列の読み込み
     std::vector<double> read_column(int read_column_num) const
@@ -208,6 +212,22 @@ public:
 
     void setData(std::vector<std::vector<double>> data) {
         data_ = data;
+    }
+
+    const std::vector<double> &getTime() const {
+        return time_;
+    }
+
+    void setTime(const std::vector<double> &time) {
+        time_ = time;
+    }
+
+    const std::vector<double> &getRotAngle() const {
+        return rot_angle_;
+    }
+
+    void setRotAngle(const std::vector<double> &rotAngle) {
+        rot_angle_ = rotAngle;
     }
 };
 
