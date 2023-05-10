@@ -6,10 +6,26 @@
 #define ESTIMATE_SIMULATION_ACCURACY_BRDF_H
 #define _USE_MATH_DEFINES
 
-#include <EIgen/Dense>
+#include <Eigen/Dense>
 #include <cmath>
 #include "CsvData.h"
 #include "random/random.h"
+
+struct Light{ // 光源情報はまだ仮でおくだけだから適当に定義すること
+    double wavelength;
+    Eigen::Vector3d dl;
+};
+
+struct SurfaceGeometry{
+    double amplitude;  // pdf出力の一番右の値にすればいい気がする（深さなので
+    double pitch;  // 傷の付け方が直線的で，結局sinになっているけど詳しいこと分からないら適当に作ること
+    Eigen::Vector3d dv;
+};
+
+struct Scene{
+    SurfaceGeometry geo;
+    Light light;
+};
 
 class BRDF{
 private:
