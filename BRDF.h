@@ -49,7 +49,7 @@ public:
 class SurfaceGeometry{
 private:
     double amplitude_;  // pdf出力の一番右の値にすればいい気がする（深さなので
-    double pitch_;  // 傷の付け方が直線的で，結局sinになっているけど詳しいこと分からないら適当に作ること
+    double pitch_;  // 傷の付け方が直線的で，結局sinになっているらしいけど詳しいこと分からないら適当に作ること
     Eigen::Vector3d dv_; // カメラの方向にあたる
 
 public:
