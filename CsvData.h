@@ -9,6 +9,24 @@
 #include <iostream>
 #include <fstream>
 #include <array>
+#include <regex>
+
+// 文字列の中から数値を拾ってきてdouble型の配列を返す関数
+std::vector<double> extractNumbers(const std::string& str) {
+    std::cout << "edit strings" << std::endl;
+    std::vector<double> numbers;
+    std::regex e("(\\d+)"); // 数値を抽出する正規表現
+
+    std::sregex_iterator begin = std::sregex_iterator(str.begin(), str.end(), e);
+    std::sregex_iterator end;
+    for (std::sregex_iterator i = begin; i != end; ++i) {
+        std::smatch match = *i; // 数値型と一致した結果を格納する
+        std::cout << match.str() << std::endl;
+        numbers.push_back(std::stod(match.str())); // doubleに変換して追加
+    }
+
+    return numbers;
+}
 
 class CsvData {
 private:
@@ -76,6 +94,27 @@ public:
         }
 
         file.close();
+    }
+
+
+    // csvデータの縦列の読み込み
+    std::vector<double> read_column(int read_column_num) const
+    {
+        std::vector<double> row;
+        for(int i = 0; i < data_.size(); i++){
+            row.push_back(data_[i][read_column_num]);
+        }
+
+        return row;
+    }
+
+    // データの中から指定した構造のtheta, phiを持ってくる
+    std::vector<std::vector<double>> read_camera_solid_angles(int surface_num) const {
+        std::vector<std::vector<double>> camera_solid_angle;
+        camera_solid_angle.push_back(read_column(2 + surface_num * 5));
+        camera_solid_angle.push_back(read_column(2 + surface_num * 5 + 1));
+
+        return camera_solid_angle;
     }
 
     // csv読み込むとき用のカンマ区切り関数
