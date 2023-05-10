@@ -90,16 +90,13 @@ public:
 
 class BRDF{
 private:
-    CsvData csv_;
     Light light_;
     SurfaceGeometry geo_;
 
 
 public:
     // 必要な情報はここで読むこと
-    BRDF(CsvData csv){
-        csv_ = csv;
-
+    BRDF(){
         // 光源情報の作成
         Light light{375, {0, 1, 1}};
         light_ = light;
@@ -145,14 +142,6 @@ public:
         auto brdf = total_brdf_value / loop_freq;
 
         return brdf;
-    }
-
-    const CsvData &getCsv() const {
-        return csv_;
-    }
-
-    void setCsv(const CsvData &csv) {
-        csv_ = csv;
     }
 
     const Light &getLight() const {
