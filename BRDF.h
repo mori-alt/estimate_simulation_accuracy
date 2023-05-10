@@ -4,12 +4,16 @@
 
 #ifndef ESTIMATE_SIMULATION_ACCURACY_BRDF_H
 #define ESTIMATE_SIMULATION_ACCURACY_BRDF_H
-#define _USE_MATH_DEFINES
+
 
 #include <Eigen/Dense>
 #include <cmath>
 #include "CsvData.h"
 #include "random/random.h"
+
+// fixme なんかcmathの定数が呼び出せないからごり押し解決
+const double M_PI = 3.141592653589793;
+
 
 struct Light{ // 光源情報はまだ仮でおくだけだから適当に定義すること
     double wavelength;
