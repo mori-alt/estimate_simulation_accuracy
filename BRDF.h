@@ -17,20 +17,18 @@ const double M_PI = 3.141592653589793;
 class BRDF{
 private:
     // 光源情報
-    double wavelength_;
-    Eigen::Vector3d dl_;
+    const double wavelength_;
+    const Eigen::Vector3d dl_;
 
     // 表面構造
-    double amplitude_;  // pdf出力の一番右の値にすればいい気がする（深さなので
-    double pitch_;  // 傷の付け方が直線的で，結局sinになっているらしいけど詳しいこと分からないら適当に作ること
-    Eigen::Vector3d dv_; // カメラの方向にあたる
+    const double amplitude_;  // pdf出力の一番右の値にすればいい気がする（深さなので
+    const double pitch_;  // 傷の付け方が直線的で，結局sinになっているらしいけど詳しいこと分からないら適当に作ること
+    const Eigen::Vector3d dv_; // カメラの方向にあたる
 
-    // 物体の回転を追いかけるベクトル
-    // 実装は物体表面ではなくカメラと光源が一緒に動く感じにする
-    std::vector<double> rot_angle_;
+    // 物体の回転を追いかけるベクトル 実装ではカメラと光源を動かす
+    const std::vector<double> rot_angle_;
 
 public:
-    BRDF(){}
     BRDF(const double wavelength, const  Eigen::Vector3d& dl, const  double amplitude, const  double pitch, const Eigen::Vector3d& dv, const std::vector<double>& rot_angle)
     : wavelength_(wavelength), dl_(dl.normalized()), amplitude_(amplitude), pitch_(pitch), dv_(dv.normalized()), rot_angle_(rot_angle){}
 
@@ -59,60 +57,57 @@ public:
         return k * k * ( iota_x1 * std::conj(iota_x2) ).real() / ( 4.0 * M_PI * M_PI * c * c * dl_.y() * dv_.y() );
     }
 
-//    繰り返し処理の計算
-    double estimate_brdf(const int loop_freq) const {
+    // brdfの期待値計算
+    double estimate_brdf_exp_value(const int loop_freq) const {
         auto total_brdf_value = 0.0;
 #pragma omp parallel for
         for(int i = 0; i < loop_freq; i++){
             Eigen::Vector2d brdf_st;
             brdf_st << randomMT(), randomMT();
-            const auto brdf_value = eval_sinusoidal_brdf( brdf_st );
-            total_brdf_value += brdf_value;
+            const auto _brdf_value = eval_sinusoidal_brdf( brdf_st );
+            total_brdf_value += _brdf_value;
         }
-        auto brdf = total_brdf_value / loop_freq;
+        auto brdf_exp_value = total_brdf_value / loop_freq;
 
-        return brdf;
+        return brdf_exp_value;
+    }
+
+    std::vector<double> calc_all_frame_brdf() const {
+        std::vector<double> brdfs;
+
+        for(int i = 0; i < rot_angle_.size(); i++){
+            brdfs.push_back(estimate_brdf_exp_value(2.0e15));
+
+            // 物体表面の回転に対応して周囲の要素を回転させる
+
+        }
+
     }
 
     double getWavelength() const {
         return wavelength_;
     }
 
-    void setWavelength(double wavelength) {
-        wavelength_ = wavelength;
-    }
 
     const Eigen::Vector3d &getDl() const {
         return dl_;
     }
 
-    void setDl(const Eigen::Vector3d &dl) {
-        dl_ = dl;
-    }
 
     double getAmplitude() const {
         return amplitude_;
     }
 
-    void setAmplitude(double amplitude) {
-        amplitude_ = amplitude;
-    }
 
     double getPitch() const {
         return pitch_;
     }
 
-    void setPitch(double pitch) {
-        pitch_ = pitch;
-    }
 
     const Eigen::Vector3d &getDv() const {
         return dv_;
     }
 
-    void setDv(const Eigen::Vector3d &dv) {
-        dv_ = dv;
-    }
 };
 
 #endif //ESTIMATE_SIMULATION_ACCURACY_BRDF_H
