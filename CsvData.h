@@ -11,7 +11,7 @@
 #include <array>
 #include <regex>
 
-// fixme なんかcmathの定数が呼び出せないからごり押し解決
+// fixme なんかcmathの定数が呼び出せないからごり押し解決  visual studioのコンパイラの問題な気がします
 const double M_PI = 3.141592653589793;
 
 // 文字列の中から数値を拾ってきてdouble型の配列を返す関数

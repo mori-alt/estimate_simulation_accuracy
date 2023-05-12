@@ -73,11 +73,24 @@ public:
         std::vector<double> brdfs;
 
         for(int i = 0; i < rot_angle_.size(); i++){
-            brdfs.push_back(estimate_brdf_exp_value(2.0e15));
+            brdfs.push_back(estimate_brdf_exp_value(pow(2, 15)));
 
             // 物体表面の回転に対応して周囲の要素を回転させる
 
         }
+
+    }
+
+    // デバッグ用　メンバ変数確認用
+    void show_member() {
+        std::cout << "member" << std::endl;
+        std::cout << "wavelength : " << wavelength_ << std::endl;
+        std::cout << "dl\n" << dl_ << std::endl;
+        std::cout << "amplitude : " << amplitude_ << std::endl;
+        std::cout << "pitch : " << pitch_ << std::endl;
+        std::cout << "dv : \n" << dv_ << std::endl;
+        std::cout << "rot_angle size: " << rot_angle_.size() << std::endl;
+        std::cout << "rot_angle[1]" << rot_angle_[1] << std::endl;
 
     }
 
@@ -108,7 +121,6 @@ public:
     const std::vector<double> &getRotAngle() const {
         return rot_angle_;
     }
-
 };
 
 #endif //ESTIMATE_SIMULATION_ACCURACY_BRDF_H
