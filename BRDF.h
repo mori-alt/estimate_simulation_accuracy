@@ -105,6 +105,10 @@ public:
         return dv_;
     }
 
+    const std::vector<double> &getRotAngle() const {
+        return rot_angle_;
+    }
+
 };
 
 #endif //ESTIMATE_SIMULATION_ACCURACY_BRDF_H
