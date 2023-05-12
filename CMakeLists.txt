@@ -3,7 +3,7 @@ project(estimate_simulation_accuracy)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(estimate_simulation_accuracy main.cpp CsvData.h BRDF.h ./random/random.cpp ./random/random.h)
+add_executable(estimate_simulation_accuracy main.cpp CsvData.h BRDF.h ./random/random.cpp ./random/random.h ./spectra/spectra_data.h ./spectra/spectra_data.cpp)
 
 find_package(Eigen3 REQUIRED)
 target_link_libraries("${CMAKE_PROJECT_NAME}" Eigen3::Eigen)
