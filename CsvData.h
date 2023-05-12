@@ -13,15 +13,13 @@
 
 // 文字列の中から数値を拾ってきてdouble型の配列を返す関数
 std::vector<double> extractNumbers(const std::string& str) {
-    std::cout << "edit strings" << std::endl;
     std::vector<double> numbers;
     std::regex e("(\\d+)"); // 数値を抽出する正規表現
 
-    std::sregex_iterator begin = std::sregex_iterator(str.begin(), str.end(), e);
+    std::sregex_iterator begin = std::sregex_iterator(str.begin(), str.end(), e); // 数値型と一致するイテレータを出力？　処理の理解怪しいかも
     std::sregex_iterator end;
     for (std::sregex_iterator i = begin; i != end; ++i) {
         std::smatch match = *i; // 数値型と一致した結果を格納する
-        std::cout << match.str() << std::endl;
         numbers.push_back(std::stod(match.str())); // doubleに変換して追加
     }
 
@@ -42,6 +40,34 @@ private:
     std::vector<std::vector<double>> data_;
     std::vector<double> time_;
     std::vector<double> rot_angle_;
+
+    // 回転対応用　初期値からどれだけ回転しているかで計算する　続け手回転させ続けるわけではないからそこだけ注意
+    // 引数はradian になるからそこも注意
+    Eigen::MatrixXd rotation_matrix_y(const double phi) const {
+        // y軸が上向きのはずだからy軸中心の回転を定義しているけど問題があったら適宜修正を加えること
+        Eigen::MatrixXd rotate(3, 3);
+        rotate << cos(phi), 0, -sin(phi), 0, 1, 0, sin(phi), 0, cos(phi);
+        return rotate;
+    }
+
+    Eigen::Vector3d rotate_pos(const Eigen::MatrixXd& rotate_matrix, const Eigen::Vector3d& current_position) const {
+        return rotate_matrix * current_position;
+    }
+
+    // csv読み込むとき用のカンマ区切り関数
+    std::vector<std::string> split(const std::string& input, char delimiter)
+    {
+        std::istringstream stream(input);
+
+        std::string field;
+        std::vector<std::string> result;
+        while (std::getline(stream, field, delimiter)) {
+            result.push_back(field);
+        }
+        return result;
+    }
+
+
 
 public:
     CsvData(){
@@ -121,17 +147,8 @@ public:
         return camera_solid_angle;
     }
 
-    // csv読み込むとき用のカンマ区切り関数
-    std::vector<std::string> split(const std::string& input, char delimiter)
-    {
-        std::istringstream stream(input);
-
-        std::string field;
-        std::vector<std::string> result;
-        while (std::getline(stream, field, delimiter)) {
-            result.push_back(field);
-        }
-        return result;
+    std::vector<double> getSurfaceGeo(int surface_num) const {
+        return extractNumbers(header_[2 + surface_num * 5]);
     }
 
     std::string getFilePath() const {
