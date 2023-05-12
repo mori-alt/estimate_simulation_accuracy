@@ -11,6 +11,9 @@
 #include <array>
 #include <regex>
 
+// fixme なんかcmathの定数が呼び出せないからごり押し解決
+const double M_PI = 3.141592653589793;
+
 // 文字列の中から数値を拾ってきてdouble型の配列を返す関数
 std::vector<double> extractNumbers(const std::string& str) {
     std::vector<double> numbers;
@@ -40,6 +43,7 @@ private:
     std::vector<std::vector<double>> data_;
     std::vector<double> time_;
     std::vector<double> rot_angle_;
+    Eigen::Vector3d camera_pos_;
 
     // 回転対応用　初期値からどれだけ回転しているかで計算する　続け手回転させ続けるわけではないからそこだけ注意
     // 引数はradian になるからそこも注意
@@ -66,6 +70,21 @@ private:
         }
         return result;
     }
+
+    double radian2degree(const double radian)const {
+        return radian * 180 / M_PI;
+    }
+
+    double degree2radian(const double degree)const {
+        return degree * M_PI / 180;
+    }
+
+    Eigen::Vector3d polar_unit_vec(const double theta_degree, const double phi_degree) const {
+        return Eigen::Vector3d(std::sin(degree2radian(theta_degree))*std::cos(degree2radian(phi_degree)), std::cos(
+                degree2radian(theta_degree)), std::sin(degree2radian(theta_degree))*std::sin(degree2radian(phi_degree))).normalized();
+    }
+
+
 
 
 
@@ -123,6 +142,7 @@ public:
 
         time_ = read_column(0);
         rot_angle_ = read_column(1);
+        camera_pos_ = polar_unit_vec(camera_theta_, camera_phi_);
 
         file.close();
     }
@@ -245,6 +265,14 @@ public:
 
     void setRotAngle(const std::vector<double> &rotAngle) {
         rot_angle_ = rotAngle;
+    }
+
+    const Eigen::Vector3d &getCameraPos() const {
+        return camera_pos_;
+    }
+
+    void setCameraPos(const Eigen::Vector3d &cameraPos) {
+        camera_pos_ = cameraPos;
     }
 };
 
