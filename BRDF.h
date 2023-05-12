@@ -18,19 +18,18 @@ private:
     const Eigen::Vector3d dl_;
 
     // 表面構造
-    const double amplitude_;  // pdf出力の一番右の値にすればいい気がする（深さなので
-    const double pitch_;  // 傷の付け方が直線的で，結局sinになっているらしいけど詳しいこと分からないら適当に作ること
-    const Eigen::Vector3d dv_; // カメラの方向にあたる
+    const double amplitude_;  // pdf right  output (depth
+    const double pitch_;  // surface structure ( scratch frequency
+    const Eigen::Vector3d dv_; // camera direction
 
-    // 物体の回転を追いかけるベクトル 実装ではカメラと光源を動かす
+    // rotation angle ( move light and camera in program
     const std::vector<double> rot_angle_;
 
-    // 回転対応用　初期値からどれだけ回転しているかで計算する　続け手回転させ続けるわけではないからそこだけ注意
-    // 引数はradian になるからそこも注意
-    Eigen::MatrixXd rotation_matrix_y(const double phi) const {
+    // calc value from initial value
+    Eigen::MatrixXd rotation_matrix_y(const double phi_rad) const {
         // y軸が上向きのはずだからy軸中心の回転を定義しているけど問題があったら適宜修正を加えること
         Eigen::MatrixXd rotate(3, 3);
-        rotate << cos(phi), 0, -sin(phi), 0, 1, 0, sin(phi), 0, cos(phi);
+        rotate << cos(phi_rad), 0, -sin(phi_rad), 0, 1, 0, sin(phi_rad), 0, cos(phi_rad);
         return rotate;
     }
 
@@ -67,7 +66,7 @@ public:
         return k * k * ( iota_x1 * std::conj(iota_x2) ).real() / ( 4.0 * M_PI * M_PI * c * c * dl_.y() * dv_.y() );
     }
 
-    // brdfの期待値計算
+    // calc expected value
     double estimate_brdf_exp_value(const int loop_freq) const {
         auto total_brdf_value = 0.0;
 #pragma omp parallel for
@@ -92,9 +91,11 @@ public:
 
         }
 
+        return brdfs;
+
     }
 
-    // デバッグ用　メンバ変数確認用
+    // for debug
     void show_member() {
         std::cout << "member" << std::endl;
         std::cout << "wavelength : " << wavelength_ << std::endl;

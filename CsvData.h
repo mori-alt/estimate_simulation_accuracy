@@ -14,21 +14,7 @@
 // fixme なんかcmathの定数が呼び出せないからごり押し解決  visual studioのコンパイラの問題な気がします
 const double M_PI = 3.141592653589793;
 
-// 文字列の中から数値を拾ってきてdouble型の配列を返す関数
-// 絶対値1未満の少数は読めないので注意
-std::vector<double> extractNumbers(const std::string& str) {
-    std::vector<double> numbers;
-    std::regex e("(\\d+)"); // 数値を抽出する正規表現
 
-    std::sregex_iterator begin = std::sregex_iterator(str.begin(), str.end(), e); // 数値型と一致するイテレータを出力？　処理の理解怪しいかも
-    std::sregex_iterator end;
-    for (std::sregex_iterator i = begin; i != end; ++i) {
-        std::smatch match = *i; // 数値型と一致した結果を格納する
-        numbers.push_back(std::stod(match.str())); // doubleに変換して追加
-    }
-
-    return numbers;
-}
 
 class CsvData {
 private:
@@ -72,6 +58,22 @@ private:
                 degree2radian(theta_degree)), std::sin(degree2radian(theta_degree))*std::sin(degree2radian(phi_degree))).normalized();
     }
 
+    // pick up number from string -> double
+    // only absolute value more than 1
+    std::vector<double> extractNumbers(const std::string& str) const {
+        std::vector<double> numbers;
+        std::regex e("(\\d+)"); // 数値を抽出する正規表現
+
+        std::sregex_iterator begin = std::sregex_iterator(str.begin(), str.end(), e); // 数値型と一致するイテレータを出力？　処理の理解怪しいかも
+        std::sregex_iterator end;
+        for (std::sregex_iterator i = begin; i != end; ++i) {
+            std::smatch match = *i; // 数値型と一致した結果を格納する
+            numbers.push_back(std::stod(match.str())); // doubleに変換して追加
+        }
+
+        return numbers;
+    }
+
 public:
     CsvData(){
 
@@ -79,24 +81,24 @@ public:
     CsvData(std::string csv_path) {
         file_path_ = csv_path;
         std::ifstream file(file_path_, std::ios::in);
-        if (!file.is_open()) {  // ちゃんと拾うかは置いといて失敗したらエラー投げさせる
+        if (!file.is_open()) {
             throw std::runtime_error("file cannot be opened");
         }
 
-        // 全ての行を読み込み
+        // read all lines
         std::string str = "";
         std::vector<std::string> lines;
         while(getline(file, str)){
             lines.push_back(str);
         }
 
-        // 全データのカンマ区切り
+        // split strings by ,
         std::vector<std::vector<std::string>> string_data;
         for(int i = 8; i < lines.size(); i++){
             string_data.push_back(split(lines[i], ','));
         }
 
-        // 数値型に変換
+        // string -> double
         for(int i = 0; i < string_data.size(); i++){
             std::vector<double> double_value;
             for(int j = 0; j < 2+5*75; j++){
@@ -105,7 +107,6 @@ public:
             data_.push_back(double_value);
         }
 
-        // メンバ変数を格納
         for(int i = 0; i < eye_pos_.size(); i++) eye_pos_[i] = std::stod(split(lines[0], ',')[i + 1]);
         for(int i = 0; i < look_at_.size(); i++) look_at_[i] = std::stod(split(lines[1], ',')[i + 1]);
         dist_to_look_at_ = std::stod(split(lines[2], ',')[1]);
@@ -114,14 +115,13 @@ public:
         camera_psi_ = std::stod(split(lines[5], ',')[1]);
         omega_ = std::stod(split(lines[6], ',')[1]);
         header_ = split(lines[7], ',');
-        header_.erase(header_.end() - 1); // 末尾余計にカウントしてしまうので削除しておく
+        header_.erase(header_.end() - 1); // remove end extra count
         time_ = read_column(0);
         rot_angle_ = read_column(1);
         camera_pos_ = polar_unit_vec(camera_theta_, camera_phi_);
         file.close();
     }
 
-    // csvデータの縦列の読み込み
     std::vector<double> read_column(int read_column_num) const
     {
         std::cout << "read column" << std::endl;
@@ -134,7 +134,6 @@ public:
         return row;
     }
 
-    // データの中から指定した構造のtheta, phiを持ってくる
     std::vector<std::vector<double>> read_camera_solid_angles(int surface_num) const {
         std::vector<std::vector<double>> camera_solid_angle;
         camera_solid_angle.push_back(read_column(2 + surface_num * 5));
@@ -143,8 +142,8 @@ public:
         return camera_solid_angle;
     }
 
-    // csvから受け渡し可能な物体の表面構造　かっこよくいってるけど振幅渡してるだけ
-    // todo 筋の間隔を有効に活用したいのでそこの処理をどうするか確認すること
+    // only take amplitude
+    // todo want to take out the spacing of the tines
     std::vector<double> getSurfaceGeo(int surface_num) const {
         return extractNumbers(header_[2 + surface_num * 5]);
     }
