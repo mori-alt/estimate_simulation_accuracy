@@ -85,10 +85,6 @@ private:
                 degree2radian(theta_degree)), std::sin(degree2radian(theta_degree))*std::sin(degree2radian(phi_degree))).normalized();
     }
 
-
-
-
-
 public:
     CsvData(){
 
@@ -100,11 +96,26 @@ public:
             throw std::runtime_error("file cannot be opened");
         }
 
-        // 全ての行の内容を読み込み
+        // 全ての行を読み込み
         std::string str = "";
         std::vector<std::string> lines;
         while(getline(file, str)){
             lines.push_back(str);
+        }
+
+        // 全データのカンマ区切り
+        std::vector<std::vector<std::string>> string_data;
+        for(int i = 8; i < lines.size(); i++){
+            string_data.push_back(split(lines[i], ','));
+        }
+
+        // 数値型に変換
+        for(int i = 0; i < string_data.size(); i++){
+            std::vector<double> double_value;
+            for(int j = 0; j < 2+5*75; j++){
+                double_value.push_back(std::stod(string_data[i][j]));
+            }
+            data_.push_back(double_value);
         }
 
         // メンバ変数を格納
@@ -120,28 +131,14 @@ public:
         time_ = read_column(0);
         rot_angle_ = read_column(1);
         camera_pos_ = polar_unit_vec(camera_theta_, camera_phi_);
-
-        // csv各データの格納
-        // string 型で文字列格納 一文から分離する
-        std::vector<std::vector<std::string>> string_data;
-        for(int i = 8; i < lines.size(); i++){
-            string_data.push_back(split(lines[i], ','));
-        }
-
-        // 分離した文字列を数値型に書き換える
-        for(int i = 0; i < string_data.size(); i++){
-            std::vector<double> double_value;
-            for(int j = 0; j < 2+5*75; j++){
-                double_value.push_back(std::stod(string_data[i][j]));
-            }
-            data_.push_back(double_value);
-        }
         file.close();
     }
 
     // csvデータの縦列の読み込み
     std::vector<double> read_column(int read_column_num) const
     {
+        std::cout << "read column" << std::endl;
+        std::cout << "data.size() : " << data_.size() << std::endl;
         std::vector<double> row;
         for(int i = 0; i < data_.size(); i++){
             row.push_back(data_[i][read_column_num]);
