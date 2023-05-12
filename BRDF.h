@@ -15,12 +15,12 @@ class BRDF{
 private:
     // 光源情報
     const double wavelength_;
-    const Eigen::Vector3d dl_;
+    Eigen::Vector3d dl_;
 
     // 表面構造
     const double amplitude_;  // pdf right  output (depth
     const double pitch_;  // surface structure ( scratch frequency
-    const Eigen::Vector3d dv_; // camera direction
+    Eigen::Vector3d dv_; // camera direction
 
     // rotation angle ( move light and camera in program
     const std::vector<double> rot_angle_;
@@ -33,8 +33,20 @@ private:
         return rotate;
     }
 
-    Eigen::Vector3d rotate_pos(const Eigen::MatrixXd& rotate_matrix, const Eigen::Vector3d& current_position) const {
-        return rotate_matrix * current_position;
+    double radian2degree(const double radian)const {
+        return radian * 180 / M_PI;
+    }
+
+    double degree2radian(const double degree)const {
+        return degree * M_PI / 180;
+    }
+
+    void rotate_dl(const double rot_angle) {
+        dl_ = rotation_matrix_y(degree2radian(rot_angle)) * dl_;
+    }
+
+    void rotate_dv(const double rot_angle) {
+        dv_ = rotation_matrix_y(degree2radian(rot_angle)) * dv_;
     }
 
 public:
@@ -81,18 +93,16 @@ public:
         return brdf_exp_value;
     }
 
-    std::vector<double> calc_all_frame_brdf() const {
+    std::vector<double> calc_all_frame_brdf() {
         std::vector<double> brdfs;
-
-        for(int i = 0; i < rot_angle_.size(); i++){
-            brdfs.push_back(estimate_brdf_exp_value(pow(2, 15)));
-
-            // 物体表面の回転に対応して周囲の要素を回転させる
-
+        // calculate brdf with rotating dl and dv
+        for(double rot_angle : rot_angle_){
+            rotate_dl(rot_angle);
+            rotate_dv(rot_angle);
+            brdfs.push_back(estimate_brdf_exp_value(pow(2, 20)));
         }
 
         return brdfs;
-
     }
 
     // for debug
