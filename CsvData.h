@@ -15,6 +15,7 @@
 const double M_PI = 3.141592653589793;
 
 // 文字列の中から数値を拾ってきてdouble型の配列を返す関数
+// 絶対値1未満の少数は読めないので注意
 std::vector<double> extractNumbers(const std::string& str) {
     std::vector<double> numbers;
     std::regex e("(\\d+)"); // 数値を抽出する正規表現
@@ -107,14 +108,8 @@ public:
         }
 
         // メンバ変数を格納
-        for(int i = 0; i < eye_pos_.size(); i++){
-            eye_pos_[i] = std::stod(split(lines[0], ',')[i + 1]);
-        }
-
-        for(int i = 0; i < look_at_.size(); i++){
-            look_at_[i] = std::stod(split(lines[1], ',')[i + 1]);
-        }
-
+        for(int i = 0; i < eye_pos_.size(); i++) eye_pos_[i] = std::stod(split(lines[0], ',')[i + 1]);
+        for(int i = 0; i < look_at_.size(); i++) look_at_[i] = std::stod(split(lines[1], ',')[i + 1]);
         dist_to_look_at_ = std::stod(split(lines[2], ',')[1]);
         camera_theta_ = std::stod(split(lines[3], ',')[1]);
         camera_phi_ = std::stod(split(lines[4], ',')[1]);
@@ -122,6 +117,9 @@ public:
         omega_ = std::stod(split(lines[6], ',')[1]);
         header_ = split(lines[7], ',');
         header_.erase(header_.end() - 1); // 末尾余計にカウントしてしまうので削除しておく
+        time_ = read_column(0);
+        rot_angle_ = read_column(1);
+        camera_pos_ = polar_unit_vec(camera_theta_, camera_phi_);
 
         // csv各データの格納
         // string 型で文字列格納 一文から分離する
@@ -129,7 +127,6 @@ public:
         for(int i = 8; i < lines.size(); i++){
             string_data.push_back(split(lines[i], ','));
         }
-
 
         // 分離した文字列を数値型に書き換える
         for(int i = 0; i < string_data.size(); i++){
@@ -139,11 +136,6 @@ public:
             }
             data_.push_back(double_value);
         }
-
-        time_ = read_column(0);
-        rot_angle_ = read_column(1);
-        camera_pos_ = polar_unit_vec(camera_theta_, camera_phi_);
-
         file.close();
     }
 
@@ -167,6 +159,8 @@ public:
         return camera_solid_angle;
     }
 
+    // csvから受け渡し可能な物体の表面構造　かっこよくいってるけど振幅渡してるだけ
+    // todo 筋の間隔を有効に活用したいのでそこの処理をどうするか確認すること
     std::vector<double> getSurfaceGeo(int surface_num) const {
         return extractNumbers(header_[2 + surface_num * 5]);
     }
