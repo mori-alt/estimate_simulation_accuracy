@@ -25,6 +25,19 @@ private:
     // 物体の回転を追いかけるベクトル 実装ではカメラと光源を動かす
     const std::vector<double> rot_angle_;
 
+    // 回転対応用　初期値からどれだけ回転しているかで計算する　続け手回転させ続けるわけではないからそこだけ注意
+    // 引数はradian になるからそこも注意
+    Eigen::MatrixXd rotation_matrix_y(const double phi) const {
+        // y軸が上向きのはずだからy軸中心の回転を定義しているけど問題があったら適宜修正を加えること
+        Eigen::MatrixXd rotate(3, 3);
+        rotate << cos(phi), 0, -sin(phi), 0, 1, 0, sin(phi), 0, cos(phi);
+        return rotate;
+    }
+
+    Eigen::Vector3d rotate_pos(const Eigen::MatrixXd& rotate_matrix, const Eigen::Vector3d& current_position) const {
+        return rotate_matrix * current_position;
+    }
+
 public:
     BRDF(const double wavelength, const  Eigen::Vector3d& dl, const  double amplitude, const  double pitch, const Eigen::Vector3d& dv, const std::vector<double>& rot_angle)
     : wavelength_(wavelength), dl_(dl.normalized()), amplitude_(amplitude), pitch_(pitch), dv_(dv.normalized()), rot_angle_(rot_angle){}

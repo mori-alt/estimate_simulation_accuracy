@@ -46,19 +46,6 @@ private:
     std::vector<double> rot_angle_;
     Eigen::Vector3d camera_pos_;
 
-    // 回転対応用　初期値からどれだけ回転しているかで計算する　続け手回転させ続けるわけではないからそこだけ注意
-    // 引数はradian になるからそこも注意
-    Eigen::MatrixXd rotation_matrix_y(const double phi) const {
-        // y軸が上向きのはずだからy軸中心の回転を定義しているけど問題があったら適宜修正を加えること
-        Eigen::MatrixXd rotate(3, 3);
-        rotate << cos(phi), 0, -sin(phi), 0, 1, 0, sin(phi), 0, cos(phi);
-        return rotate;
-    }
-
-    Eigen::Vector3d rotate_pos(const Eigen::MatrixXd& rotate_matrix, const Eigen::Vector3d& current_position) const {
-        return rotate_matrix * current_position;
-    }
-
     // csv読み込むとき用のカンマ区切り関数
     std::vector<std::string> split(const std::string& input, char delimiter)
     {
