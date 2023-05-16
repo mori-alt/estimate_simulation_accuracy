@@ -31,6 +31,20 @@ int main() {
 
     csv.update_RGB(RGB, 4);
 
+    // calculate all situation
+    for(int i = 0; i < 74; ++i){
+        // calculate brdf
+        BRDF brdf2(wavelength, dl, csv.getSurfaceGeo(i)[2], pitch, csv.getCameraPos(), csv.getRotAngle());
+        std::vector<double> brdfs = brdf2.calc_all_frame_brdf();
+
+        // convert2RGB
+        std::vector<Eigen::Vector3d> rgb;
+        for(double wavelength : brdfs) rgb.push_back(convertSpectraData2RGB());
+
+        // update csv_data
+        csv.update_RGB(rgb, i);
+    }
+
     // output csv sample
     const std::string output_path = "./output_csv/sample_output.csv";
     csv.output_csv(output_path);

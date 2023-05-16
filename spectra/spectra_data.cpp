@@ -459,9 +459,10 @@ void getXYZForSpectraWindow( const unsigned long in_Lambda, const unsigned long 
   out_XYZ /= in_DeltaLambda;
 }
 
-void convertSpectraData2RGB( Eigen::Vector3d& out_RGB, const int in_NumSpect, const std::vector<Eigen::Vector3d>& in_Spectra2XYZ, const double* in_SpectraData, const double in_Ratio )
+Eigen::Vector3d convertSpectraData2RGB( const int in_NumSpect, const std::vector<Eigen::Vector3d>& in_Spectra2XYZ, const double* in_SpectraData, const double in_Ratio )
 {
-  out_RGB.setZero();
+    Eigen::Vector3d out_RGB;
+    out_RGB.setZero();
 
 	for( int k=0; k<in_NumSpect; k++ )
 	{
@@ -483,7 +484,9 @@ void convertSpectraData2RGB( Eigen::Vector3d& out_RGB, const int in_NumSpect, co
 
 	//const double exposure = 0.75;
 
-  out_RGB.x() = std::max<double>( 0.0, r );//R;//1.0 - exp(-R*exposure);
+    out_RGB.x() = std::max<double>( 0.0, r );//R;//1.0 - exp(-R*exposure);
 	out_RGB.y() = std::max<double>( 0.0, g );//G;//1.0 - exp(-G*exposure);
 	out_RGB.z() = std::max<double>( 0.0, b );//B;//1.0 - exp(-B*exposure);
+
+    return out_RGB;
 }

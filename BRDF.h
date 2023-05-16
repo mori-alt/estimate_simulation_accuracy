@@ -10,6 +10,7 @@
 #include <cmath>
 #include "CsvData.h"
 #include "random/random.h"
+#include "spectra/spectra_data.h"
 
 class BRDF{
 private:
@@ -99,7 +100,7 @@ public:
         for(double rot_angle : rot_angle_){
             rotate_dl(rot_angle);
             rotate_dv(rot_angle);
-            brdfs.push_back(estimate_brdf_exp_value(pow(2, 20)));
+            brdfs.push_back(estimate_brdf_exp_value(pow(2, 15)));  // todo decide loop num
         }
 
         return brdfs;
