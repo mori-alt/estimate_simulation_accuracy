@@ -147,6 +147,21 @@ public:
         return camera_solid_angle;
     }
 
+    void output_csv(std::string output_path) const {
+        std::ofstream output_csv(output_path);
+
+        for(std::string init_row : initial_row_) {
+            output_csv << init_row << std::endl;
+        }
+
+        for(std::vector<double> row_data : data_) {
+            for(double value : row_data) {
+                output_csv << value << ',';
+            }
+            output_csv << std::endl;
+        }
+    }
+
     // only take amplitude
     // todo want to take out the spacing of the lines
     std::vector<double> getSurfaceGeo(int surface_num) const {
