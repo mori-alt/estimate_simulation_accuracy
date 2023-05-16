@@ -31,8 +31,9 @@ private:
     std::vector<double> time_;
     std::vector<double> rot_angle_;
     Eigen::Vector3d camera_pos_;
+    std::vector<std::string> initial_row_;
 
-    // csv読み込むとき用のカンマ区切り関数
+    // split string each ,
     std::vector<std::string> split(const std::string& input, char delimiter)
     {
         std::istringstream stream(input);
@@ -75,10 +76,9 @@ private:
     }
 
 public:
-    CsvData(){
-
-    }
+    CsvData() { }
     CsvData(std::string csv_path) {
+        // read csv
         file_path_ = csv_path;
         std::ifstream file(file_path_, std::ios::in);
         if (!file.is_open()) {
@@ -92,7 +92,12 @@ public:
             lines.push_back(str);
         }
 
-        // split strings by ,
+        // set initial row
+        for(int i = 0; i < 8; ++i){
+            initial_row_.push_back(lines[i]);
+        }
+
+        // split strings each ,
         std::vector<std::vector<std::string>> string_data;
         for(int i = 8; i < lines.size(); i++){
             string_data.push_back(split(lines[i], ','));
@@ -107,6 +112,7 @@ public:
             data_.push_back(double_value);
         }
 
+        // save member
         for(int i = 0; i < eye_pos_.size(); i++) eye_pos_[i] = std::stod(split(lines[0], ',')[i + 1]);
         for(int i = 0; i < look_at_.size(); i++) look_at_[i] = std::stod(split(lines[1], ',')[i + 1]);
         dist_to_look_at_ = std::stod(split(lines[2], ',')[1]);
@@ -122,8 +128,7 @@ public:
         file.close();
     }
 
-    std::vector<double> read_column(int read_column_num) const
-    {
+    std::vector<double> read_column(int read_column_num) const {
         std::cout << "read column" << std::endl;
         std::cout << "data.size() : " << data_.size() << std::endl;
         std::vector<double> row;
@@ -143,7 +148,7 @@ public:
     }
 
     // only take amplitude
-    // todo want to take out the spacing of the tines
+    // todo want to take out the spacing of the lines
     std::vector<double> getSurfaceGeo(int surface_num) const {
         return extractNumbers(header_[2 + surface_num * 5]);
     }
@@ -250,6 +255,10 @@ public:
 
     void setCameraPos(const Eigen::Vector3d &cameraPos) {
         camera_pos_ = cameraPos;
+    }
+
+    const std::vector<std::string> &getInitialRow() const {
+        return initial_row_;
     }
 };
 
