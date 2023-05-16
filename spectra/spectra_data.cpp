@@ -444,14 +444,14 @@ const double g_ColorMatchingFunction_z[] = {
 
 void getXYZForSpectraWindow( const unsigned long in_Lambda, const unsigned long in_DeltaLambda, Eigen::Vector3d& out_XYZ )
 {
-  const int minL = in_Lambda - ( in_DeltaLambda>>1 );
-	const int maxL = minL + in_DeltaLambda - 1;
+  const int minL = in_Lambda - ( in_DeltaLambda>>1 );  // in_DeltaLambda >> 1 = 12 : 11001 -> 1100
+	const int maxL = minL + in_DeltaLambda - 1;  //
 
 	out_XYZ.setZero();
 
 	for(int k=minL; k<=maxL; k++)
 	{
-		const int w = k - MIN_WAVELENGTH;
+		const int w = k - MIN_WAVELENGTH;  // MINWAVELENGTH = 360
 		out_XYZ.x() += g_ColorMatchingFunction_x[w];
 		out_XYZ.y() += g_ColorMatchingFunction_y[w];
 		out_XYZ.z() += g_ColorMatchingFunction_z[w];
