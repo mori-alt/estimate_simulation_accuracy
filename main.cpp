@@ -24,6 +24,13 @@ int main() {
     std::cout << csv.getData().size() << std::endl;
     std::cout << csv.getData()[0].size() << std::endl;
 
+    std::vector<Eigen::Vector3d> RGB;
+    for(int i = 0; i < csv.getData().size(); ++i){
+        RGB.push_back({1, 2, 3});
+    }
+
+    csv.update_RGB(RGB, 4);
+
     // output csv sample
     const std::string output_path = "./output_csv/sample_output.csv";
     csv.output_csv(output_path);

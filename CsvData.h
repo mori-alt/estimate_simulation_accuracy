@@ -10,6 +10,7 @@
 #include <fstream>
 #include <array>
 #include <regex>
+#include <Eigen/Dense>
 
 // fixme なんかcmathの定数が呼び出せないからごり押し解決  visual studioのコンパイラの問題な気がします
 const double M_PI = 3.141592653589793;
@@ -162,7 +163,20 @@ public:
         }
     }
 
+    void update_RGB(const std::vector<Eigen::Vector3d>& RGB, const int surface_num) {
+        const int r_row = 2 + 5 * surface_num + 2;
+        const int g_row = 2 + 5 * surface_num + 3;
+        const int b_row = 2 + 5 * surface_num + 4;
+
+        for(int i = 0; i < data_.size(); ++i) {
+            data_[i][r_row] = RGB[i].x();
+            data_[i][g_row] = RGB[i].y();
+            data_[i][b_row] = RGB[i].z();
+        }
+    }
+
     // only take amplitude
+    // surface_num 0 ~ 74
     // todo want to take out the spacing of the lines
     std::vector<double> getSurfaceGeo(int surface_num) const {
         return extractNumbers(header_[2 + surface_num * 5]);
