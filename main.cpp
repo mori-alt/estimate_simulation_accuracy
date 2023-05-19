@@ -43,7 +43,7 @@ int main() {
     for(int i = 0; i < loop_num; ++i){
         Eigen::Vector2d random_st;
         random_st << randomMT(), randomMT();
-        _brdf = brdf.eval_sinusoidal_brdf(random_st);
+//        _brdf = brdf.eval_sinusoidal_brdf(random_st);
         // add normal dot calc?
         const auto f = _brdf;
         accumulation_spectra[0] += f;
