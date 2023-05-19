@@ -85,8 +85,8 @@ public:
         return k * k * ( iota_x1 * std::conj(iota_x2) ).real() / ( 4.0 * M_PI * M_PI * c * c * in_dl.y() * in_dv.y() );
     }
 
-    double eval_sinusoidal_brdf( const Eigen::Vector2d& in_random_st ) const
-    {
+//    double eval_sinusoidal_brdf( const Eigen::Vector2d& in_random_st ) const
+//    {
 //        using namespace std::complex_literals;
 //
 //        const float g_c = 50.0; //[um]  表面構造の一辺の長さ
@@ -107,10 +107,10 @@ public:
 //        const auto iota_x1 = factor * _integral_x1_ * c;
 //        const auto iota_x2 = factor * _integral_x2_ * c;
 
-        return BRDF::eval_sinusoidal_brdf(wavelength_, in_random_st, dl_, dv_, amplitude_, pitch_);
+//        return BRDF::eval_sinusoidal_brdf(wavelength_, in_random_st, dl_, dv_, amplitude_, pitch_);
 
 //        return k * k * ( iota_x1 * std::conj(iota_x2) ).real() / ( 4.0 * M_PI * M_PI * c * c * dl_.y() * dv_.y() );
-    }
+//    }
 
     // calc expected value
     double estimate_brdf_exp_value(const int loop_freq) const {
