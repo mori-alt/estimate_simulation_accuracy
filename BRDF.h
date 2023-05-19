@@ -127,6 +127,19 @@ public:
         return brdf_exp_value;
     }
 
+    double calc_accumulate_brdf_value(const int loop_freq) const {
+        auto accumulate_brdf_value = 0.0;
+#pragma omp parallel for
+        for(int i = 0; i < loop_freq; ++i) {
+            Eigen::Vector2d brdf_st;
+            brdf_st << randomMT(), randomMT();
+            const auto _brdf_value = eval_sinusoidal_brdf(wavelength_, brdf_st, dl_, dv_, amplitude_, pitch_);
+            accumulate_brdf_value += _brdf_value;
+        }
+
+        return accumulate_brdf_value;
+    }
+
     std::vector<double> calc_all_frame_brdf() {
         std::vector<double> brdfs;
         // calculate brdf with rotating dl and dv
