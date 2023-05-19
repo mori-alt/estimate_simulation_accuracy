@@ -113,6 +113,9 @@ public:
             data_.push_back(double_value);
         }
 
+        std::cout << "csv_data column size : " << data_.size() << std::endl;
+        std::cout << "csv_data row size    : " << data_[0].size() << std::endl;
+
         // save member
         for(int i = 0; i < eye_pos_.size(); i++) eye_pos_[i] = std::stod(split(lines[0], ',')[i + 1]);
         for(int i = 0; i < look_at_.size(); i++) look_at_[i] = std::stod(split(lines[1], ',')[i + 1]);
@@ -127,13 +130,24 @@ public:
         rot_angle_ = read_column(1);
         camera_pos_ = polar_unit_vec(camera_theta_, camera_phi_);
         file.close();
+
+
     }
 
     std::vector<double> read_column(int read_column_num) const {
-        std::cout << "read column : " << read_column_num << std::endl;
         std::vector<double> row;
         for(int i = 0; i < data_.size(); i++){
             row.push_back(data_[i][read_column_num]);
+        }
+
+        if(read_column_num == 0) {
+            std::cout << "read column [time], size : " << row.size() << std::endl;
+        }
+        else if(read_column_num == 1) {
+            std::cout << "read column [rot], size  : " << row.size() << std::endl;
+        }
+        else {
+            std::cout << "read column [RGB, angle], size : " << row.size() << std::endl;
         }
 
         return row;
