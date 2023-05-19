@@ -127,13 +127,14 @@ public:
         return brdf_exp_value;
     }
 
-    double calc_accumulate_brdf_value(const int loop_freq) const {
+    double calc_accumulate_brdf_value(const int loop_freq, Eigen::Vector3d dl, Eigen::Vector3d dv) const {
         auto accumulate_brdf_value = 0.0;
 #pragma omp parallel for
         for(int i = 0; i < loop_freq; ++i) {
             Eigen::Vector2d brdf_st;
             brdf_st << randomMT(), randomMT();
-            const auto _brdf_value = eval_sinusoidal_brdf(wavelength_, brdf_st, dl_, dv_, amplitude_, pitch_);
+            const auto _brdf_value = eval_sinusoidal_brdf(wavelength_, brdf_st, dl, dv, amplitude_, pitch_);
+            // todo add calc normal dot sequence
             accumulate_brdf_value += _brdf_value;
         }
 
@@ -150,6 +151,17 @@ public:
         }
 
         return brdfs;
+    }
+
+    void calc_accumulate_all_angle(std::vector<double>& spectra_accumulates, const int loop_freq) {
+        for(double rotangle : rot_angle_) {
+            // rotate scene
+            const Eigen::Vector3d dl = rotation_matrix_y(degree2radian(rotangle)) * dl_;
+            const Eigen::Vector3d dv = rotation_matrix_y(degree2radian(rotangle)) * dv_;
+//            std::cout << rotangle << " : " << dl.transpose() << std::endl;
+
+            spectra_accumulates.push_back(calc_accumulate_brdf_value(loop_freq, dl, dv));
+        }
     }
 
     std::vector<double> eval_brdf_each_rot_angle() {
