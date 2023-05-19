@@ -177,6 +177,7 @@ public:
     }
 
     void update_RGB(const std::vector<Eigen::Vector3d>& RGB, const int surface_num) {
+        std::cout << "update csv RGB data" << std::endl;
         const int r_row = 2 + 5 * surface_num + 2;
         const int g_row = 2 + 5 * surface_num + 3;
         const int b_row = 2 + 5 * surface_num + 4;
@@ -186,6 +187,7 @@ public:
             data_[i][g_row] = RGB[i].y();
             data_[i][b_row] = RGB[i].z();
         }
+        std::cout << "finished" << std::endl;
     }
 
     // only take amplitude
