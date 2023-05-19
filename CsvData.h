@@ -130,8 +130,7 @@ public:
     }
 
     std::vector<double> read_column(int read_column_num) const {
-        std::cout << "read column" << std::endl;
-        std::cout << "data.size() : " << data_.size() << std::endl;
+        std::cout << "read column : " << read_column_num << std::endl;
         std::vector<double> row;
         for(int i = 0; i < data_.size(); i++){
             row.push_back(data_[i][read_column_num]);
