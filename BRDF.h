@@ -164,10 +164,6 @@ public:
         }
     }
 
-    std::vector<double> eval_brdf_each_rot_angle() {
-
-    }
-
     // for debug
     void show_member() {
         std::cout << "member" << std::endl;
