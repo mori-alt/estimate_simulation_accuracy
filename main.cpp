@@ -35,19 +35,27 @@ int main() {
     BRDF brdf(wavelength, dl, csv.getSurfaceGeo(surface_num)[2], pitch, csv.getCameraPos(), csv.getRotAngle());
 
     const int loop_num = 1 << 15;
-    std::cout << loop_num << std::endl;
+    std::cout << "loop_num : " << loop_num << std::endl;
 
     auto _brdf = 0.0;
+    std::vector<double> accumulate_spectras;
+    brdf.calc_accumulate_all_angle(accumulate_spectras, loop_num);
+    std::cout << "accumulate vector size : " << accumulate_spectras.size() << std::endl;
+
+    // convert to RGB from spectra
+    std::vector<Eigen::Vector3d> out_RGB;
+
+
 
     // calc spectra accumulation
-    for(int i = 0; i < loop_num; ++i){
-        Eigen::Vector2d random_st;
-        random_st << randomMT(), randomMT();
-//        _brdf = brdf.eval_sinusoidal_brdf(random_st);
-        // add normal dot calc?
-        const auto f = _brdf;
-        accumulation_spectra[0] += f;
-    }
+//    for(int i = 0; i < loop_num; ++i){
+//        Eigen::Vector2d random_st;
+//        random_st << randomMT(), randomMT();
+//        _brdf = BRDF::eval_sinusoidal_brdf(brdf.getWavelength(), random_st, brdf.getDl(), brdf.getDv(), brdf.getAmplitude(), brdf.getPitch());
+//        // add normal dot calc?
+//        const auto f = _brdf;
+//        accumulation_spectra[0] += f;
+//    }
 
 
 // save color test
@@ -57,13 +65,6 @@ int main() {
 //    }
 //    csv.update_RGB(RGB, 4);
 
-
-    // calculate brdf
-    BRDF brdf2(wavelength, dl, csv.getSurfaceGeo(surface_num)[2], pitch, csv.getCameraPos(), csv.getRotAngle());
-    std::vector<double> brdfs = brdf2.calc_all_frame_brdf();
-
-    // convert2RGB
-    std::vector<Eigen::Vector3d> rgb;
 
 
 //    // update csv RGB data
