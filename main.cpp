@@ -17,7 +17,7 @@ int main() {
     const int surface_num = 3;
     std::vector<int> wavelengths;
     std::vector<Eigen::Vector3d> spectra2XYZ_conversion;
-    std::array<double, NSPECT> accumulation_spectra;
+    std::vector<double> accumulation_spectra;
 
     wavelengths.clear();
     spectra2XYZ_conversion.clear();
@@ -48,7 +48,7 @@ int main() {
     std::cout << "accumulate vector size : " << accumulate_spectras.size() << std::endl;
 
     // convert to RGB from spectra
-    std::vector<Eigen::Vector3d> rgb;
+    Eigen::Vector3d rgb;
     convertSpectraData2RGB(rgb, NSPECT, spectra2XYZ_conversion, accumulation_spectra, light_intensity);
 
     // output csv sample
