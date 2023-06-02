@@ -443,13 +443,11 @@ const double g_ColorMatchingFunction_z[] = {
         0.0, 0.0, 0.0, 0.0, 0.0
 };
 
+// make conversion xyz from spectra
 void getXYZForSpectraWindow( const unsigned long in_Lambda, const unsigned long in_DeltaLambda, Eigen::Vector3d& out_XYZ )
 {
     const int minL = in_Lambda - ( in_DeltaLambda>>1 );
     const int maxL = minL + in_DeltaLambda - 1;
-//    std::cout << "Lambda" << std::endl;
-//    std::cout << minL << std::endl;
-//    std::cout << maxL << std::endl;
 
     out_XYZ.setZero();
 
