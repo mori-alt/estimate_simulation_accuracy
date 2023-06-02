@@ -15,6 +15,10 @@
 class BRDF{
 private:
     // 光源情報
+    static constexpr int DL = 25;
+    static constexpr int NSPECT = 16;
+    static constexpr int WAVELENGTHS[NSPECT] = { 375, 400, 425, 450, 475, 500, 525, 550, 575, 600, 625, 650, 675, 700, 725, 750 };
+    static constexpr double light_intensity = 0.25;
     const double wavelength_;
     Eigen::Vector3d dl_;
 
@@ -85,6 +89,15 @@ public:
         return k * k * ( iota_x1 * std::conj(iota_x2) ).real() / ( 4.0 * M_PI * M_PI * c * c * in_dl.y() * in_dv.y() );
     }
 
+    static void set_spectra2XYZ_conversion(std::vector<Eigen::Vector3d>& spectra2XYZ_conversion) {
+        for(auto i = 0; i < NSPECT; ++i){
+//        wavelengths.push_back( WAVELENGTHS[i]);
+            Eigen::Vector3d XYZ_data;
+            getXYZForSpectraWindow(WAVELENGTHS[i], DL, XYZ_data);
+            spectra2XYZ_conversion.push_back( XYZ_data);
+        }
+    }
+
     // calc expected value
     double estimate_brdf_exp_value(const int loop_freq) const {
         auto total_brdf_value = 0.0;
@@ -128,10 +141,9 @@ public:
 
     void calc_accumulate_all_angle(std::vector<double>& spectra_accumulates, const int loop_freq) {
         for(double rotangle : rot_angle_) {
-            // rotate scene
+            // rotate scene each angle
             const Eigen::Vector3d dl = rotation_matrix_y(degree2radian(rotangle)) * dl_;
             const Eigen::Vector3d dv = rotation_matrix_y(degree2radian(rotangle)) * dv_;
-//            std::cout << rotangle << " : " << dl.transpose() << std::endl;
 
             spectra_accumulates.push_back(calc_accumulate_brdf_value(loop_freq, dl, dv));
         }
