@@ -4,6 +4,7 @@
 #include <random>
 #include "CsvData.h"
 #include "BRDF.h"
+#include "./spectra/spectra_data.h"
 
 
 int main() {
@@ -11,7 +12,7 @@ int main() {
     const auto DL = 25;
     const auto NSPECT = 16;
     const int WAVELENGTHS[NSPECT] = { 375, 400, 425, 450, 475, 500, 525, 550, 575, 600, 625, 650, 675, 700, 725, 750 };
-    const auto lgith_intensity = 0.25;
+    const auto light_intensity = 0.25;
     const double wavelength = 375;
     const int surface_num = 3;
     std::vector<int> wavelengths;
@@ -47,7 +48,8 @@ int main() {
     std::cout << "accumulate vector size : " << accumulate_spectras.size() << std::endl;
 
     // convert to RGB from spectra
-    std::vector<Eigen::Vector3d> out_RGB;
+    std::vector<Eigen::Vector3d> rgb;
+    convertSpectraData2RGB(rgb, NSPECT, spectra2XYZ_conversion, accumulation_spectra, light_intensity);
 
     // output csv sample
     const std::string output_path = "./output_csv/sample_output.csv";
