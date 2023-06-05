@@ -28,10 +28,11 @@ int main() {
     const int loop_num = 1 << 15;
     Eigen::Vector3d dl(0, 1, 1);
     CsvData csv("./csv/result_3.csv");
-    BRDF brdf(wavelength, dl, csv.getSurfaceGeo(surface_index)[2], pitch, csv.getCameraPos(), csv.getRotAngle());
+    BRDF brdf(loop_num, wavelength, dl, csv.getSurfaceGeo(surface_index)[2], pitch, csv.getCameraPos(), csv.getRotAngle());
 
     // calc spectra
-    std::vector<std::vector<double>> accumulation_spectras;
+    std::vector<std::array<double, 16>> accumulation_spectras(0);
+
     std::vector<double> accumulate_spectras; // each angle
     brdf.calc_accumulate_all_angle(accumulate_spectras, loop_num);
     std::cout << "accumulate vector size : " << accumulate_spectras.size() << std::endl;

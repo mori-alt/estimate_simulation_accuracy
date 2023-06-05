@@ -14,7 +14,7 @@
 
 class BRDF{
 private:
-    // 光源情報
+    // light source
     static constexpr int DL = 25;
     static constexpr int NSPECT = 16;
     static constexpr int WAVELENGTHS[NSPECT] = { 375, 400, 425, 450, 475, 500, 525, 550, 575, 600, 625, 650, 675, 700, 725, 750 };
@@ -22,17 +22,18 @@ private:
     const double wavelength_;
     Eigen::Vector3d dl_;
 
-    // 表面構造
+    // surface structure
     const double amplitude_;  // pdf right  output (depth
     const double pitch_;  // surface structure ( scratch frequency
     Eigen::Vector3d dv_; // camera direction
 
     // rotation angle ( move light and camera in program
     const std::vector<double> rot_angle_;
+    const int loop_;
 
     // calc value from initial value
     Eigen::MatrixXd rotation_matrix_y(const double phi_rad) const {
-        // y軸が上向きのはずだからy軸中心の回転を定義しているけど問題があったら適宜修正を加えること
+        // rotate with Y axis
         Eigen::MatrixXd rotate(3, 3);
         rotate << cos(phi_rad), 0, -sin(phi_rad), 0, 1, 0, sin(phi_rad), 0, cos(phi_rad);
         return rotate;
@@ -55,8 +56,8 @@ private:
     }
 
 public:
-    BRDF(const double wavelength, const  Eigen::Vector3d& dl, const  double amplitude, const  double pitch, const Eigen::Vector3d& dv, const std::vector<double>& rot_angle)
-    : wavelength_(wavelength), dl_(dl.normalized()), amplitude_(amplitude), pitch_(pitch), dv_(dv.normalized()), rot_angle_(rot_angle){}
+    BRDF(const int loop, const double wavelength, const  Eigen::Vector3d& dl, const  double amplitude, const  double pitch, const Eigen::Vector3d& dv, const std::vector<double>& rot_angle)
+    : loop_(loop), wavelength_(wavelength), dl_(dl.normalized()), amplitude_(amplitude), pitch_(pitch), dv_(dv.normalized()), rot_angle_(rot_angle){}
 
     static double eval_sinusoidal_brdf( const double _in_wave_length, const Eigen::Vector2d& in_random_st, const Eigen::Vector3d& in_dl, const Eigen::Vector3d& in_dv, const double amplitude, const double pitch )
     {
@@ -127,6 +128,10 @@ public:
         return accumulate_brdf_value;
     }
 
+    void calc_accumulate_brdf_spectra(std::vector<std::array<double, 16>>, const int loop, const Eigen::Vector3d& dl, const Eigen::Vector3d& dv) {
+
+    }
+
     std::vector<double> calc_all_frame_brdf() {
         std::vector<double> brdfs;
         // calculate brdf with rotating dl and dv
@@ -145,7 +150,20 @@ public:
             const Eigen::Vector3d dl = rotation_matrix_y(degree2radian(rotangle)) * dl_;
             const Eigen::Vector3d dv = rotation_matrix_y(degree2radian(rotangle)) * dv_;
 
+            // save spectra
             spectra_accumulates.push_back(calc_accumulate_brdf_value(loop_freq, dl, dv));
+        }
+    }
+
+    void _calc_accumulate_all_angle(std::vector<std::array<double, 16>>& spectra_accumulates, const int loop_freq) {
+        for(double rotangle : rot_angle_) {
+            // rotate scene each angle
+            const Eigen::Vector3d dl = rotation_matrix_y(degree2radian(rotangle)) * dl_;
+            const Eigen::Vector3d dv = rotation_matrix_y(degree2radian(rotangle)) * dv_;
+
+            // save spectra
+            // spectra_accumulates.push_back(calc_accumulate_brdf_value(loop_freq, dl, dv));
+
         }
     }
 
