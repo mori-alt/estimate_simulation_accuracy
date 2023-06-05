@@ -462,7 +462,7 @@ void getXYZForSpectraWindow( const unsigned long in_Lambda, const unsigned long 
     out_XYZ /= in_DeltaLambda;
 }
 
-void convertSpectraData2RGB( Eigen::Vector3d& out_RGB, const int in_NumSpect, const std::vector<Eigen::Vector3d>& in_Spectra2XYZ, const std::vector<double>& in_SpectraData, const double in_Ratio )
+void convertSpectraData2RGB( Eigen::Vector3d& out_RGB, const int in_NumSpect, const std::vector<Eigen::Vector3d>& in_Spectra2XYZ, const std::array<double, 16>& in_SpectraData, const double in_Ratio )
 {
     out_RGB.setZero();
 
