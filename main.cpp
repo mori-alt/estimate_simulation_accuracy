@@ -12,9 +12,10 @@ int main() {
     const auto NSPECT = 16;
     const auto light_intensity = 0.25;
     const int surface_index = 0;
+
+    // XYZ convert coefficient
     std::vector<Eigen::Vector3d> spectra2XYZ_conversion;
     spectra2XYZ_conversion.clear();
-
     BRDF::set_spectra2XYZ_conversion(spectra2XYZ_conversion);
 
     // set scene data from csv
@@ -23,6 +24,7 @@ int main() {
     Eigen::Vector3d dl(0, 1, 1);
     CsvData csv("./csv/result_3.csv");
     BRDF brdf(loop_num, dl, csv.getSurfaceGeo(surface_index)[2], pitch, csv.getCameraPos(), csv.getRotAngle());
+    brdf.show_member();
 
     // calc spectra
     std::vector<std::array<double, 16>> accumulation_spectras(0);
