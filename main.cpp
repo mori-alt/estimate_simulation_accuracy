@@ -19,11 +19,11 @@ int main() {
     BRDF::set_spectra2XYZ_conversion(spectra2XYZ_conversion);
 
     // set scene data from csv
-    const double pitch = 600;
     const int loop_num = 1 << 15;
     Eigen::Vector3d dl(0, 1, 1);
     CsvData csv("./csv/result_3.csv");
-    BRDF brdf(loop_num, dl, csv.getSurfaceGeo(surface_index)[2], pitch, csv.getCameraPos(), csv.getRotAngle());
+    BRDF brdf(loop_num, dl, csv.getSurfaceGeo(surface_index)[2], csv.getSurfaceGeo(surface_index)[0], csv.getCameraPos(), csv.getRotAngle());
+
     brdf.show_member();
 
     // calc spectra

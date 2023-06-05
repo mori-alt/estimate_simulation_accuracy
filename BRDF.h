@@ -130,7 +130,7 @@ public:
         std::cout << "loop : " << loop_ << std::endl;
         std::cout << "dl : " << dl_.transpose() << std::endl;
         std::cout << "amplitude (surface): " << amplitude_ << std::endl;
-        std::cout << "pitch (): " << pitch_ << std::endl;
+        std::cout << "pitch (surface): " << pitch_ << std::endl;
         std::cout << "dv (surface): " << dv_.transpose() << std::endl;
         std::cout << "rot_angle size: " << rot_angle_.size() << std::endl;
         std::cout << "rot_angle[1]" << rot_angle_[1] << std::endl;
