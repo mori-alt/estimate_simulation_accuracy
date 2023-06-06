@@ -67,6 +67,7 @@ public:
         const auto A = amplitude * 1.0e-9;
         const auto L = pitch * 1.0e-9;
         const auto c = 50 * 1.0e-6;
+//        const auto c = 1.0;
 
         const Eigen::Vector3d dh_bar = ( in_dl + in_dv ) * 0.5;
 
@@ -161,6 +162,14 @@ public:
 
     const std::vector<double> &getRotAngle() const {
         return rot_angle_;
+    }
+
+    static const double getLightIntensity() {
+        return light_intensity;
+    }
+
+    const int getLoop() const {
+        return loop_;
     }
 };
 

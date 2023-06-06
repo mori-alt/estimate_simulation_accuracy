@@ -33,8 +33,8 @@ int main() {
     // convert to RGB from spectra
     std::vector<Eigen::Vector3d> out_RGBs;
     for(std::array<double, 16> brdf_spectra : accumulation_spectras) {
-        Eigen::Vector3d rgb;
-        convertSpectraData2RGB(rgb, NSPECT, spectra2XYZ_conversion, brdf_spectra, light_intensity);
+        Eigen::Vector3d rgb = Eigen::Vector3d::Zero();
+        convertSpectraData2RGB(rgb, NSPECT, spectra2XYZ_conversion, brdf_spectra, light_intensity / brdf.getLoop());
         out_RGBs.push_back(rgb);
     }
 
