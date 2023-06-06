@@ -2,12 +2,17 @@
 #include <filesystem>
 #include <Eigen/Dense>
 #include <random>
+#include <direct.h>
 #include "CsvData.h"
 #include "BRDF.h"
 #include "./spectra/spectra_data.h"
 
-
 int main() {
+    // set file data
+    const int csv_file_num = 3;
+    std::string input_path = "./csv/result_" + std::to_string(csv_file_num) + ".csv";
+    std::string output_path = "./output_csv/result_" + std::to_string(csv_file_num) + ".csv";
+
     // set scene info
     const auto NSPECT = 16;
     const auto light_intensity = 0.25;
@@ -40,9 +45,7 @@ int main() {
 
     // output csv
     csv.update_RGB(out_RGBs, surface_index);
-    const std::string output_path = "./output_csv/sample_output.csv";
     csv.output_csv(output_path);
-
 
     return 0;
 }
