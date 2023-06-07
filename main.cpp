@@ -27,8 +27,6 @@ void estimate_accuracy_one_surface(const int surface_index) {
         CsvData csv(input_path);
         BRDF brdf(loop_num, dl, csv.getSurfaceGeo(surface_index)[2], csv.getSurfaceGeo(surface_index)[0], csv.getCameraPos(), csv.getRotAngle());
 
-        brdf.show_member();
-
         // calc spectra
         std::vector<std::array<double, 16>> accumulation_spectras(0);
         brdf._calc_accumulate_all_angle(accumulation_spectras);

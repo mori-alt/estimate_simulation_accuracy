@@ -56,7 +56,10 @@ private:
 
 public:
     BRDF(const int loop, const  Eigen::Vector3d& dl, const  double amplitude, const  double pitch, const Eigen::Vector3d& dv, const std::vector<double>& rot_angle)
-    : loop_(loop), dl_(dl.normalized()), amplitude_(amplitude), pitch_(pitch), dv_(dv.normalized()), rot_angle_(rot_angle){}
+    : loop_(loop), dl_(dl.normalized()), amplitude_(amplitude), pitch_(pitch), dv_(dv.normalized()), rot_angle_(rot_angle)
+    {
+        show_member();
+    }
 
     static double eval_sinusoidal_brdf( const double _in_wave_length, const Eigen::Vector2d& in_random_st, const Eigen::Vector3d& in_dl, const Eigen::Vector3d& in_dv, const double amplitude, const double pitch )
     {
@@ -134,7 +137,7 @@ public:
 
     // for debug
     void show_member() {
-        std::cout << "\n### member ###" << std::endl;
+        std::cout << '\n' << "### member ###" << std::endl;
         std::cout << "loop : " << loop_ << std::endl;
         std::cout << "dl : " << dl_.transpose() << std::endl;
         std::cout << "amplitude (surface): " << amplitude_ << std::endl;
@@ -142,8 +145,7 @@ public:
         std::cout << "dv (surface): " << dv_.transpose() << std::endl;
         std::cout << "rot_angle size: " << rot_angle_.size() << std::endl;
         std::cout << "rot_angle[1]" << rot_angle_[1] << std::endl;
-        std::cout << "##############\n" << std::endl;
-
+        std::cout << "##############"<< '\n' << std::endl;
     }
 
 
