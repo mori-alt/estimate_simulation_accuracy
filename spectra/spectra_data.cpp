@@ -486,7 +486,7 @@ void convertSpectraData2RGB( Eigen::Vector3d& out_RGB, const int in_NumSpect, co
 
     //const double exposure = 0.75;
 
-    out_RGB.x() = std::max<double>( 0.0, r );//R;//1.0 - exp(-R*exposure);
-    out_RGB.y() = std::max<double>( 0.0, g );//G;//1.0 - exp(-G*exposure);
-    out_RGB.z() = std::max<double>( 0.0, b );//B;//1.0 - exp(-B*exposure);
+    out_RGB.x() = std::max<double>( 0.0, r ) * 255;//R;//1.0 - exp(-R*exposure);
+    out_RGB.y() = std::max<double>( 0.0, g ) * 255;//G;//1.0 - exp(-G*exposure);
+    out_RGB.z() = std::max<double>( 0.0, b ) * 255;//B;//1.0 - exp(-B*exposure);
 }
