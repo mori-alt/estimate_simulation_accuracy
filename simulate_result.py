@@ -8,16 +8,10 @@ import numpy as np
 import math
 import glob
 import csv
-import os
-
-print('current directly')
-print(os.getcwd())
 
 # データの一覧取得
 files = glob.glob('./cmake-build-release/output_csv/*')
 files = [x.replace('\\', '/') for x in files]
-
-print('read files')
 print(files)
 
 # 一覧のデータからcsvの読み込み
@@ -41,7 +35,7 @@ def genThetaPhi2DPlots():
 
     # point_thickness = 0.000000000001  # 線みたいになっちゃう
 
-    point_thickness = 1.0e-8
+    point_thickness = 1.0e-12 * 1.5
 
     plt.subplots_adjust(left=0.05, bottom=0.05, right=0.95, top=0.95, wspace=0.1, hspace=0.6)
 
@@ -67,6 +61,7 @@ def genThetaPhi2DPlots():
                 range_scale = camera_theta / 90
                 # RGBデータの取得
                 C = np.array([d.iloc[:, n + 2].values, d.iloc[:, n + 3].values, d.iloc[:, n + 4].values]) / 255.0
+                print(C.transpose())
                 C = C.transpose()
                 txt = names[n]
                 # 角度を計算する
@@ -87,7 +82,7 @@ def genThetaPhi2DPlots():
     st.write(fig1)
     plt.savefig('./1-single_mixed_15.pdf')
 
-    # 下半分のデータを出力する
+    # output_double data
     fig2 = plt.figure()
     nx2 = 3
     ny2 = 9
@@ -103,21 +98,21 @@ def genThetaPhi2DPlots():
 
             for movie_num in range(len(files)):
                 d = pd.read_csv(files[movie_num], header=7)
-                # 適切なスケーリングの計算
-                # CSVファイルを開く
+                # scaling
+                # open csv
                 with open(files[movie_num], 'r') as file:
-                    # CSVファイルを読み込む
+                    # read csv
                     reader = csv.reader(file)
-                    # 指定された行と列のデータを取得する
+                    # get column and row
                     data = [row[1] for idx, row in enumerate(reader) if idx == 3]
 
                 camera_theta = float(data[0])
                 range_scale = camera_theta / 90
-                # RGBデータの取得
+                # get RGB
                 C = np.array([d.iloc[:, n + 2].values, d.iloc[:, n + 3].values, d.iloc[:, n + 4].values]) / 255.0
                 C = C.transpose()
                 txt = names[n]
-                # 角度を計算する
+                # calc angle
                 theta = np.radians(d.iloc[:, n].values)
                 phi = np.radians(d.iloc[:, n + 1].values)
                 x = theta / (math.pi * 0.5) * np.cos(phi)

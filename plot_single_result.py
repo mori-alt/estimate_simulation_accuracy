@@ -10,7 +10,8 @@ import glob
 import csv
 
 # データの一覧取得
-files = glob.glob('./csv/*')
+# files = glob.glob('./cmake-build-release/csv/*')
+files = glob.glob('./cmake-build-release/output_csv/*')
 files = [x.replace('\\', '/') for x in files]
 print(files)
 
@@ -33,9 +34,9 @@ def genThetaPhi2DPlots():
     nx1 = 6
     ny1 = 8
 
-    # point_thickness = 0.000000000001  # 線みたいになっちゃう
+    point_thickness = 0.00000000001  # 線みたいになっちゃう
 
-    point_thickness = 1.0e-12 * 1.5
+    # point_thickness = 1.0e-12 * 1.5
 
     plt.subplots_adjust(left=0.05, bottom=0.05, right=0.95, top=0.95, wspace=0.1, hspace=0.6)
 
