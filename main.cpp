@@ -7,7 +7,7 @@
 #include "BRDF.h"
 #include "./spectra/spectra_data.h"
 
-int main() {
+void estimate_accuracy() {
     // set scene info
     const auto NSPECT = 16;
     const auto light_intensity = 0.25;
@@ -48,6 +48,11 @@ int main() {
         csv.update_RGB(out_RGBs, surface_index);
         csv.output_csv(output_path);
     }
+}
+
+int main() {
+
+
 
     return 0;
 }
