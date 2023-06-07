@@ -128,8 +128,6 @@ public:
         rot_angle_ = read_column(1);
         camera_pos_ = polar_unit_vec(camera_theta_, camera_phi_);
         file.close();
-
-
     }
 
     std::vector<double> read_column(int read_column_num) const {
