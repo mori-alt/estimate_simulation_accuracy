@@ -39,6 +39,14 @@ void estimate_accuracy() {
         std::vector<Eigen::Vector3d> out_RGBs;
         BRDF::set_out_RGB(out_RGBs, brdf.getLoop(), spectra2XYZ_conversion, accumulation_spectras);
 
+        for(auto& d : out_RGBs) {
+            d[0] = int(d[0]);
+            d[1] = int(d[1]);
+            d[2] = int(d[2]);
+        }
+
+        std::cout << out_RGBs[0].transpose() << std::endl;
+
         // output csv
         csv.update_RGB(out_RGBs, surface_index);
         csv.output_csv(output_path);
@@ -46,15 +54,23 @@ void estimate_accuracy() {
 }
 
 int main() {
-//    estimate_accuracy();
-    // XYZ convert coefficient
-    std::vector<Eigen::Vector3d> spectra2XYZ_conversion;
-    spectra2XYZ_conversion.clear();
-    BRDF::set_spectra2XYZ_conversion(spectra2XYZ_conversion);
-
-    for(auto i : spectra2XYZ_conversion) {
-        std::cout << i.transpose() << std::endl;
-    }
+    estimate_accuracy();
+//    // XYZ convert coefficient
+//    std::vector<Eigen::Vector3d> spectra2XYZ_conversion;
+//    spectra2XYZ_conversion.clear();
+//    BRDF::set_spectra2XYZ_conversion(spectra2XYZ_conversion);
+//
+//    for(auto i : spectra2XYZ_conversion) {
+//        std::cout << i.transpose() << std::endl;
+//    }
+//
+//    std::vector<Eigen::Vector3d> out_RGB;
+//    std::vector<std::array<double, 16>> accumulation_spectra;
+//    accumulation_spectra.push_back({750});
+//    BRDF::set_out_RGB(out_RGB, 1, spectra2XYZ_conversion, accumulation_spectra);
+//
+//    std::cout << "out_rgb" << std::endl;
+//    std::cout << out_RGB[0].transpose() << std::endl;
 
 
     return 0;
