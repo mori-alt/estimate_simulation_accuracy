@@ -112,7 +112,6 @@ public:
             // make light spectra
             const auto k = std::clamp(int(randomMT() * NSPECT), 0, NSPECT - 1);
             const auto wavelength = WAVELENGTHS[k];
-//            std::cout << k << " : " << wavelength << std::endl;
             Eigen::Vector2d brdf_st;
             brdf_st << randomMT(), randomMT();
             const auto f = eval_sinusoidal_brdf(wavelength, brdf_st, dl, dv, amplitude_, pitch_);

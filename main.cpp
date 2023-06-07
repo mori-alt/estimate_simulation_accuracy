@@ -37,8 +37,6 @@ void estimate_accuracy_one_surface(const int surface_index) {
         std::vector<Eigen::Vector3d> out_RGBs;
         BRDF::set_out_RGB(out_RGBs, brdf.getLoop(), spectra2XYZ_conversion, accumulation_spectras);
 
-        std::cout << out_RGBs[0].transpose() << std::endl;
-
         // output csv
         csv.update_RGB(out_RGBs, surface_index);
         csv.output_csv(output_path);
@@ -46,7 +44,7 @@ void estimate_accuracy_one_surface(const int surface_index) {
 }
 
 // todo : replacing the order of loops
-void estimate_accuracy_each_surface() {\
+void estimate_accuracy_each_surface() {
     // single surface index 3 - 47
     for(int i = 0; i < 47; ++i) {
         estimate_accuracy_one_surface(i);

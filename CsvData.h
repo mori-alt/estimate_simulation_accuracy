@@ -12,10 +12,8 @@
 #include <regex>
 #include <Eigen/Dense>
 
-// fixme なんかcmathの定数が呼び出せないからごり押し解決  visual studioのコンパイラの問題な気がします
+// fixme want to use cmath M_PI, problem in visual studio compiler??
 const double M_PI = 3.141592653589793;
-
-
 
 class CsvData {
 private:
@@ -61,16 +59,16 @@ private:
     }
 
     // pick up number from string -> double
-    // only absolute value more than 1
+    // only use absolute(value) > 1
     std::vector<double> extractNumbers(const std::string& str) const {
         std::vector<double> numbers;
-        std::regex e("(\\d+)"); // 数値を抽出する正規表現
+        std::regex e("(\\d+)"); // get num
 
         std::sregex_iterator begin = std::sregex_iterator(str.begin(), str.end(), e); // 数値型と一致するイテレータを出力？　処理の理解怪しいかも
         std::sregex_iterator end;
         for (std::sregex_iterator i = begin; i != end; ++i) {
-            std::smatch match = *i; // 数値型と一致した結果を格納する
-            numbers.push_back(std::stod(match.str())); // doubleに変換して追加
+            std::smatch match = *i; // save number type
+            numbers.push_back(std::stod(match.str())); //to double
         }
 
         return numbers;
