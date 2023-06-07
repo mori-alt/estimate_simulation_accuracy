@@ -11,6 +11,8 @@ void estimate_accuracy() {
     // set scene info
     const auto NSPECT = 16;
     const auto light_intensity = 0.25;
+    Eigen::Vector3d dl(0, 1, 1);
+    const int loop_num = 1 << 15;
 
     for(int i = 3; i < 14; ++i) {
         // set file data
@@ -21,12 +23,9 @@ void estimate_accuracy() {
 
         // XYZ convert coefficient
         std::vector<Eigen::Vector3d> spectra2XYZ_conversion;
-        spectra2XYZ_conversion.clear();
         BRDF::set_spectra2XYZ_conversion(spectra2XYZ_conversion);
 
         // set scene data from csv
-        const int loop_num = 1 << 15;
-        Eigen::Vector3d dl(0, 1, 1);
         CsvData csv(input_path);
         BRDF brdf(loop_num, dl, csv.getSurfaceGeo(surface_index)[2], csv.getSurfaceGeo(surface_index)[0], csv.getCameraPos(), csv.getRotAngle());
 
@@ -38,11 +37,7 @@ void estimate_accuracy() {
 
         // convert to RGB from spectra
         std::vector<Eigen::Vector3d> out_RGBs;
-        for(std::array<double, 16> brdf_spectra : accumulation_spectras) {
-            Eigen::Vector3d rgb = Eigen::Vector3d::Zero();
-            convertSpectraData2RGB(rgb, NSPECT, spectra2XYZ_conversion, brdf_spectra, light_intensity / brdf.getLoop());
-            out_RGBs.push_back(rgb);
-        }
+        BRDF::set_out_RGB(out_RGBs, brdf.getLoop(), spectra2XYZ_conversion, accumulation_spectras);
 
         // output csv
         csv.update_RGB(out_RGBs, surface_index);
@@ -51,7 +46,15 @@ void estimate_accuracy() {
 }
 
 int main() {
+//    estimate_accuracy();
+    // XYZ convert coefficient
+    std::vector<Eigen::Vector3d> spectra2XYZ_conversion;
+    spectra2XYZ_conversion.clear();
+    BRDF::set_spectra2XYZ_conversion(spectra2XYZ_conversion);
 
+    for(auto i : spectra2XYZ_conversion) {
+        std::cout << i.transpose() << std::endl;
+    }
 
 
     return 0;

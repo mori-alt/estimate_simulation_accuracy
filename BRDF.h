@@ -91,11 +91,19 @@ public:
     }
 
     static void set_spectra2XYZ_conversion(std::vector<Eigen::Vector3d>& spectra2XYZ_conversion) {
+        spectra2XYZ_conversion.clear();
         for(auto i = 0; i < NSPECT; ++i){
-//        wavelengths.push_back( WAVELENGTHS[i]);
             Eigen::Vector3d XYZ_data;
             getXYZForSpectraWindow(WAVELENGTHS[i], DL, XYZ_data);
             spectra2XYZ_conversion.push_back( XYZ_data);
+        }
+    }
+
+    static void set_out_RGB(std::vector<Eigen::Vector3d>& out_RGB, const int loop_num, const std::vector<Eigen::Vector3d>& spectra2XYZ_conversion, const std::vector<std::array<double, 16>>& accumulation_spectra) {
+        for(auto spectra : accumulation_spectra) {
+            Eigen::Vector3d rgb = Eigen::Vector3d::Zero();
+            convertSpectraData2RGB(rgb, NSPECT, spectra2XYZ_conversion, spectra, light_intensity / loop_num);
+            out_RGB.push_back(rgb);
         }
     }
 
