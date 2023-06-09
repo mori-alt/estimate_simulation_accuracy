@@ -7,10 +7,15 @@
 #include "BRDF.h"
 #include "./spectra/spectra_data.h"
 
+void estimate_csv_one_surface(CsvData& csv, const int surface_index){
+
+}
+
+// calc with one surface
 void estimate_accuracy_one_surface(const int surface_index) {
     // set scene info
     Eigen::Vector3d dl(0, 1, 1);
-    const int loop_num = 1 << 15;
+    const int loop_num = 1 << 10;
 
     // csv file 3 - 13
     for(int i = 3; i < 14; ++i) {
@@ -19,13 +24,13 @@ void estimate_accuracy_one_surface(const int surface_index) {
         std::string input_path = "./csv/result_" + std::to_string(csv_file_num) + ".csv";
         std::string output_path = "./output_csv/result_" + std::to_string(csv_file_num) + ".csv";
 
-        // XYZ convert coefficient
-        std::vector<Eigen::Vector3d> spectra2XYZ_conversion;
-        BRDF::set_spectra2XYZ_conversion(spectra2XYZ_conversion);
-
         // set scene data from csv
         CsvData csv(input_path);
         BRDF brdf(loop_num, dl, csv.getSurfaceGeo(surface_index)[2], csv.getSurfaceGeo(surface_index)[0], csv.getCameraPos(), csv.getRotAngle());
+
+        // XYZ convert coefficient
+        std::vector<Eigen::Vector3d> spectra2XYZ_conversion;
+        BRDF::set_spectra2XYZ_conversion(spectra2XYZ_conversion);
 
         // calc spectra
         std::vector<std::array<double, 16>> accumulation_spectras(0);
@@ -44,15 +49,15 @@ void estimate_accuracy_one_surface(const int surface_index) {
 // todo : replacing the order of loops
 void estimate_accuracy_each_surface() {
     // single surface index 3 - 47
-    for(int i = 0; i < 47; ++i) {
+    for(int i = 0; i < 48; ++i) {
         estimate_accuracy_one_surface(i);
     }
 }
 
 
 int main() {
-//    estimate_accuracy_one_surface(9);
-    estimate_accuracy_each_surface();
+    estimate_accuracy_one_surface(0);
+//    estimate_accuracy_each_surface();
 
     return 0;
 }
