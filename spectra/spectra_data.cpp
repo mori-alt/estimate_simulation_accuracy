@@ -466,8 +466,10 @@ void convertSpectraData2RGB( Eigen::Vector3d& out_RGB, const int in_NumSpect, co
 {
     out_RGB.setZero();
 
+    // all spectra -> xyz
     for( int k=0; k<in_NumSpect; k++ )
     {
+        //         spectra        conversion (scalar to vector)    light intensity
         out_RGB += in_SpectraData[k] * in_Spectra2XYZ[k] * in_Ratio;
     }
 
@@ -490,13 +492,15 @@ void convertSpectraData2RGB( Eigen::Vector3d& out_RGB, const int in_NumSpect, co
     out_RGB.y() = std::max<double>( 0.0, g );//G;//1.0 - exp(-G*exposure);
     out_RGB.z() = std::max<double>( 0.0, b );//B;//1.0 - exp(-B*exposure);
 
-    if(out_RGB.x() > 255 | out_RGB.y() > 255 | out_RGB.z() > 255){
-        std::cout << "over 225" << std::endl;
-        std::cout << out_RGB.transpose() << std::endl;
-    }
+    // todo if decide constant multiple -> normalized
+//    if(out_RGB.x() > 255 | out_RGB.y() > 255 | out_RGB.z() > 255){
+//        std::cout << "over 225" << std::endl;
+//        std::cout << out_RGB.transpose() << std::endl;
+//    }
 
 
     // normalize 0 - 255 to output pdf with python
+    // todo normalize cancel and make hist
     out_RGB.x() = std::min<double>( 255, r );//R;//1.0 - exp(-R*exposure);
     out_RGB.y() = std::min<double>( 255, g );//G;//1.0 - exp(-G*exposure);
     out_RGB.z() = std::min<double>( 255, b );//B;//1.0 - exp(-B*exposure);
