@@ -117,7 +117,10 @@ public:
             const auto wavelength = WAVELENGTHS[k];
             Eigen::Vector2d brdf_st;
             brdf_st << randomMT(), randomMT();
-            const auto f = eval_sinusoidal_brdf(wavelength, brdf_st, dl, dv, amplitude_, pitch_);
+            auto brdf = 0.0;
+            brdf = eval_sinusoidal_brdf(wavelength, brdf_st, dl, dv, amplitude_, pitch_);
+            const auto f = brdf * dl_.y();  // dl_.y() == dl_.dot({0, 1, 0}) == dl.dot(normal)
+
             brdf_spectra[k] += f;
         }
     }
