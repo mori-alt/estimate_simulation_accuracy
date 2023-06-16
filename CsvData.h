@@ -17,7 +17,8 @@ const double M_PI = 3.141592653589793;
 
 class CsvData {
 private:
-    std::string file_path_;
+    std::string input_file_path_;
+    std::string output_file_path_;
     std::array<double, 3> eye_pos_;
     std::array<double, 3> look_at_;
     double dist_to_look_at_;
@@ -76,10 +77,11 @@ private:
 
 public:
     CsvData() { }
-    CsvData(std::string csv_path) {
+    CsvData(std::string csv_path, std::string output_path) {
         // read csv
-        file_path_ = csv_path;
-        std::ifstream file(file_path_, std::ios::in);
+        input_file_path_ = csv_path;
+        output_file_path_ = output_path;
+        std::ifstream file(input_file_path_, std::ios::in);
         if (!file.is_open()) {
             throw std::runtime_error("file cannot be opened");
         }
@@ -157,8 +159,8 @@ public:
         return camera_solid_angle;
     }
 
-    void output_csv(std::string output_path) const {
-        std::ofstream output_csv(output_path);
+    void output_csv() const {
+        std::ofstream output_csv(output_file_path_);
 
         for(std::string init_row : initial_row_) {
             output_csv << init_row << std::endl;
@@ -194,11 +196,11 @@ public:
     }
 
     std::string getFilePath() const {
-        return file_path_;
+        return input_file_path_;
     }
 
     void setFilePath(const std::string &filePath) {
-        file_path_ = filePath;
+        input_file_path_ = filePath;
     }
 
     const std::array<double, 3> &getEyePos() const {
