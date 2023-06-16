@@ -28,6 +28,7 @@ st.set_page_config(layout="wide")
 names = data.columns.values
 
 # 読み込んだcsvをpdfにして出力
+# 表面構造が１種類のものだけ出力してる
 def genThetaPhi2DPlots():
     # 上半分のデータを出力する
     fig1 = plt.figure()
