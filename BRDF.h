@@ -122,7 +122,7 @@ public:
         }
     }
 
-    void _calc_accumulate_all_angle(std::vector<std::array<double, 16>>& spectra_accumulates) {
+    void calc_accumulate_all_angle(std::vector<std::array<double, 16>>& spectra_accumulates) {
         for(double rotangle : rot_angle_) {
             // rotate scene each angle
             const Eigen::Vector3d dl = rotation_matrix_y(degree2radian(rotangle)) * dl_;
