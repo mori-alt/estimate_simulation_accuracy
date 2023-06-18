@@ -1,11 +1,10 @@
 #include <iostream>
 #include <filesystem>
-#include <Eigen/Dense>
 #include <random>
-#include <direct.h>
+
+#include <Eigen/Dense>
 #include "CsvData.h"
 #include "BRDF.h"
-#include "./spectra/spectra_data.h"
 
 
 void calc_one_surface_single(CsvData& csv, const int surface_index) {
