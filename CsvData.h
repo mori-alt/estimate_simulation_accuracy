@@ -17,8 +17,8 @@ const double M_PI = 3.141592653589793;
 
 class CsvData {
 private:
-    std::string input_file_path_;
-    std::string output_file_path_;
+    std::filesystem::path input_file_path_;
+    std::filesystem::path output_file_path_;
     std::array<double, 3> eye_pos_;
     std::array<double, 3> look_at_;
     double dist_to_look_at_;
@@ -77,7 +77,7 @@ private:
 
 public:
     CsvData() { }
-    CsvData(std::string csv_path, std::string output_path) {
+    CsvData(std::filesystem::path csv_path, std::filesystem::path output_path) {
         // read csv
         input_file_path_ = csv_path;
         output_file_path_ = output_path;
@@ -195,7 +195,7 @@ public:
         return extractNumbers(header_[2 + surface_num * 5]);
     }
 
-    std::string getFilePath() const {
+    std::filesystem::path getFilePath() const {
         return input_file_path_;
     }
 

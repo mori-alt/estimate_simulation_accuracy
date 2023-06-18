@@ -8,7 +8,7 @@
 #include "./spectra/spectra_data.h"
 
 
-void calc_one_surface(CsvData& csv, const int surface_index) {
+void calc_one_surface_single(CsvData& csv, const int surface_index) {
     const int loop_num = 1 << 10;
     const Eigen::Vector3d dl(0, 1, 1);
 
@@ -31,21 +31,23 @@ void calc_one_surface(CsvData& csv, const int surface_index) {
     csv.output_csv();
 }
 
-void calc_one_csv(const int csv_file_num){
-    std::string input  = "./csv/result_" + std::to_string(csv_file_num) + ".csv";
-    std::string output = "./output_csv/result_" + std::to_string(csv_file_num) + ".csv";
+void calc_one_csv_single(const int csv_file_num){
+//    std::string input  = "./csv/result_" + std::to_string(csv_file_num) + ".csv";
+//    std::string output = "./output_csv/result_" + std::to_string(csv_file_num) + ".csv";
+    std::filesystem::path input = "./csv/result_" + std::to_string(csv_file_num) + ".csv";
+    std::filesystem::path output = "./output_csv/result_" + std::to_string(csv_file_num) + ".csv";
 
     CsvData csv(input, output);
 
     for(int surface_idx = 0; surface_idx < 48; surface_idx++){
-        calc_one_surface(csv, surface_idx);
+        calc_one_surface_single(csv, surface_idx);
     }
 }
 
 // calc all geometry
-void estimate_accuracy_single_surface(){
+void estimate_accuracy_all_csv_single(){
     for(int csv_idx = 3; csv_idx < 14; ++csv_idx){
-        calc_one_csv(csv_idx);
+        calc_one_csv_single(csv_idx);
     }
 }
 
@@ -86,10 +88,8 @@ void estimate_accuracy_one_surface(const int surface_index) {
 
 int main() {
 
-//    estimate_accuracy_one_surface(0);
-//    estimate_accuracy_each_surface();
-    estimate_accuracy_single_surface();
-
+    estimate_accuracy_one_surface(0);
+//    estimate_accuracy_all_csv_single();
 
     return 0;
 }
