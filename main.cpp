@@ -31,8 +31,6 @@ void calc_one_surface_single(CsvData& csv, const int surface_index) {
 }
 
 void calc_one_csv_single(const int csv_file_num){
-//    std::string input  = "./csv/result_" + std::to_string(csv_file_num) + ".csv";
-//    std::string output = "./output_csv/result_" + std::to_string(csv_file_num) + ".csv";
     std::filesystem::path input = "./csv/result_" + std::to_string(csv_file_num) + ".csv";
     std::filesystem::path output = "./output_csv/result_" + std::to_string(csv_file_num) + ".csv";
 
