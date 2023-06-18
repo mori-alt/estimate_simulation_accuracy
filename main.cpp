@@ -83,7 +83,6 @@ void estimate_accuracy_one_surface(const int surface_index) {
         csv.output_csv();
     }
 }
-//wwe
 
 int main() {
 
