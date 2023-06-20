@@ -8,8 +8,11 @@
 
 
 void calc_one_surface_single(CsvData& csv, const int surface_index) {
-    const int loop_num = 1 << 10;
+    const int loop_num = 1 << 15;
     const Eigen::Vector3d dl(0, 1, 1);
+
+    std::cout << "input  : " << csv.getInputFilePath() << std::endl;
+    std::cout << "output : " << csv.getOutputFilePath() << std::endl;
 
     BRDF brdf(loop_num, dl, csv.getSurfaceGeo(surface_index)[2], csv.getSurfaceGeo(surface_index)[0], csv.getCameraPos(), csv.getRotAngle());
 
@@ -85,8 +88,8 @@ void estimate_accuracy_one_surface(const int surface_index) {
 
 int main() {
 
-    estimate_accuracy_one_surface(0);
-//    estimate_accuracy_all_csv_single();
+//    estimate_accuracy_one_surface(0);
+    estimate_accuracy_all_csv_single();
 
     return 0;
 }
