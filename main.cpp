@@ -8,7 +8,7 @@
 
 
 void calc_one_surface_single(CsvData& csv, const int surface_index) {
-    const int loop_num = 1 << 20;
+    const int loop_num = 1 << 17;
     const Eigen::Vector3d dl(0, 1, 1);
 
     std::cout << "input  : " << csv.getInputFilePath() << std::endl;
