@@ -111,6 +111,7 @@ public:
     }
 
     void calc_accumulate_brdf_spectra(std::array<double, 16>& brdf_spectra, const Eigen::Vector3d& dl, const Eigen::Vector3d& dv) {
+#pragma omp parallel for
         for(int i = 0; i < loop_; ++i) {
             // make light spectra
             const auto k = std::clamp(int(randomMT() * NSPECT), 0, NSPECT - 1);
