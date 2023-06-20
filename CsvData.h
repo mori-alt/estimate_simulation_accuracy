@@ -195,12 +195,16 @@ public:
         return extractNumbers(header_[2 + surface_num * 5]);
     }
 
-    std::filesystem::path getFilePath() const {
+    std::filesystem::path getInputFilePath() const {
         return input_file_path_;
     }
 
     void setFilePath(const std::string &filePath) {
         input_file_path_ = filePath;
+    }
+
+    std::filesystem::path getOutputFilePath() {
+        return output_file_path_;
     }
 
     const std::array<double, 3> &getEyePos() const {
