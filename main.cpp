@@ -13,6 +13,7 @@ void calc_one_surface_single(CsvData& csv, const int surface_index) {
 
     std::cout << "input  : " << csv.getInputFilePath() << std::endl;
     std::cout << "output : " << csv.getOutputFilePath() << std::endl;
+    std::cout << "surface index : " << surface_index << std::endl;
 
     BRDF brdf(loop_num, dl, csv.getSurfaceGeo(surface_index)[2], csv.getSurfaceGeo(surface_index)[0], csv.getCameraPos(), csv.getRotAngle());
 
