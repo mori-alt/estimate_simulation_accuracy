@@ -60,20 +60,34 @@ def genRGBHist(surface_index):
     _title = str(int(names[n][3:7])) + 'nm/' + str(int(names[n][10:12])) + '/' + str(int(names[n][17:20])) + 'nm'
     print(_title)
 
-    R = np.array(r) * 10000
+    R = np.array(r)
     G = np.array(g)
     B = np.array(b)
-    print('size')
-    print(R.size)
-    print('min')
-    print(R.min())
-    print('max')
-    print(R.max())
-    print('scale')
-    print(R.max() - R.min())
+    print('for R')
+    show_param(R)
+
+    print('for G')
+    show_param(G)
+
+    print('for B')
+    show_param(B)
 
     plt.hist(R)
     plt.show()
+
+
+def show_param(x):
+    print('size')
+    print(x.size)
+
+    print('min')
+    print(x.min())
+
+    print('max')
+    print(x.max())
+
+    print('scale')
+    print(x.max() - x.min())
 
 
 genRGBHist(0)
