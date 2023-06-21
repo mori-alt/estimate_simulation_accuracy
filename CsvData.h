@@ -10,6 +10,7 @@
 #include <fstream>
 #include <array>
 #include <regex>
+
 #include <Eigen/Dense>
 
 // fixme want to use cmath M_PI, problem in visual studio compiler??
