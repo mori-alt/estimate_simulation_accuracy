@@ -1,7 +1,4 @@
 import pandas as pd
-#import plotly.figure_factory as ff
-# from plotly.subplots import make_subplots
-# import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import streamlit as st
 import numpy as np
@@ -10,7 +7,7 @@ import glob
 import csv
 
 # データの一覧取得
-# files = glob.glob('./cmake-build-release/csv/*')
+# files = glob.glob('../cmake-build-release/csv/*')
 files = glob.glob('../cmake-build-release/output_csv/*')
 files = [x.replace('\\', '/') for x in files]
 print(files)

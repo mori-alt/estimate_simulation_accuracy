@@ -1,7 +1,4 @@
 import pandas as pd
-#import plotly.figure_factory as ff
-# from plotly.subplots import make_subplots
-# import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import streamlit as st
 import numpy as np
@@ -45,6 +42,7 @@ def genThetaPhi2DPlots():
     for j in range(ny1):
         for i in range(nx1):
             flat_idx = j * nx1 + i  # 表示領域の番号指定
+            print('write idx : ' + str(flat_idx))
             ax = fig1.add_subplot(ny1, nx1, flat_idx+1)  # 表示領域の指定
             ax.set_aspect('equal')
             n = 2 + 5 * flat_idx  # 最初の時間と角度を抜いて列番号をとる
@@ -81,6 +79,6 @@ def genThetaPhi2DPlots():
             ax.set_title(_name, fontsize=4)
 
     st.write(fig1)
-    plt.savefig('./1-single_mixed_15.pdf')
+    plt.savefig('./single/_1-single_mixed_15.pdf')
 
 genThetaPhi2DPlots()
