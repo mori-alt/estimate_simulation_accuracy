@@ -58,6 +58,7 @@ def genRGBHist(surface_index):
 
     # set title
     _title = str(int(names[n][3:7])) + 'nm/' + str(int(names[n][10:12])) + '/' + str(int(names[n][17:20])) + 'nm'
+    file = str(int(names[n][3:7])) + 'nm_' + str(int(names[n][10:12])) + '_' + str(int(names[n][17:20])) + 'nm'
     print(_title)
 
     R = np.array(r)
@@ -71,7 +72,7 @@ def genRGBHist(surface_index):
     print('for B')
     show_param(B)
 
-    visualize_data(R)
+    visualize_data(R, file)
 
 
 def show_param(x):
@@ -87,24 +88,24 @@ def show_param(x):
     print('scale')
     print(x.max() - x.min())
 
-def visualize_data(data):
+def visualize_data(data, title):
     # ヒストグラム
     plt.figure(figsize=(10, 6))
-    plt.hist(data, bins=10000, edgecolor='k')
-    plt.title('Histogram')
-    plt.show()
+    plt.hist(data, bins=100, edgecolor='k')
+    plt.title('Histogram ' + title)
+    plt.savefig('./visualize/hist/' + title + '.png')
 
     # KDE
     plt.figure(figsize=(10, 6))
     sns.kdeplot(data)
-    plt.title('Kernel Density Estimate')
-    plt.show()
+    plt.title('Kernel Density Estimate ' + title)
+    plt.savefig('./visualize/kde/' + title + '.png')
 
     # ボックスプロット
     plt.figure(figsize=(10, 6))
     sns.boxplot(data)
-    plt.title('Box Plot')
-    plt.show()
+    plt.title('Box Plot ' + title)
+    plt.savefig('./visualize/box/' + title + '.png')
 
 
 genRGBHist(0)
