@@ -108,7 +108,9 @@ def visualize_data(data, title):
     plt.savefig('./visualize/box/' + title + '.png')
 
 
-genRGBHist(0)
+
+for i in range(48):
+    genRGBHist(i)
 
 
 
