@@ -30,14 +30,13 @@ names = data.columns.values
 
 # 読み込んだcsvをpdfにして出力
 # １つの構造について，円を１種類だけ出力する
-def plot_one_circle():
+def plot_one_circle(flat_idx):
     fig1 = plt.figure()
 
-    point_thickness = 10  # 線みたいになっちゃう
+    point_thickness = 10
 
     plt.subplots_adjust(left=0.05, bottom=0.05, right=0.95, top=0.95, wspace=0.1, hspace=0.6)
 
-    flat_idx = 0  # 表示領域の番号指定 0 - 74
     # ax = fig1.add_subplot(ny1, nx1, flat_idx+1)  # 表示領域の指定
     ax = fig1.add_subplot(1, 1, 1)
     ax.set_aspect('equal')
@@ -75,7 +74,9 @@ def plot_one_circle():
 
 
     st.write(fig1)
-    plt.savefig('./only_1-single_mixed.pdf')
+    # plt.show()
+    _output_file_name = str(int(names[n][3:7])) + 'nm_' + str(int(names[n][10:12])) + '_' + str(int(names[n][17:20])) + 'nm'
+    plt.savefig('./single/png/' + _output_file_name + '.png')
 
-
-plot_one_circle()
+for i in range(75):
+    plot_one_circle(i)
