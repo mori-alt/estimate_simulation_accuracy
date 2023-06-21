@@ -3,7 +3,6 @@
 #include <random>
 
 #include <Eigen/Dense>
-#include "csv.h"
 #include "CsvData.h"
 #include "BRDF.h"
 
@@ -91,14 +90,8 @@ void estimate_accuracy_one_surface(const int surface_index) {
 int main() {
 
 //    estimate_accuracy_one_surface(0);
-//    estimate_accuracy_all_csv_single();
+    estimate_accuracy_all_csv_single();
 
-    io::CSVReader<3> in("ram.csv");
-    in.read_header(io::ignore_extra_column, "vender", "size", "speed");
-    std::string vender; int size; double speed;
-    while(in.read_row(vender, size, speed)){
-        // do stuff with the data
-    }
 
     return 0;
 }
