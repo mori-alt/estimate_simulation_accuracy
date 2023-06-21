@@ -63,17 +63,15 @@ def genRGBHist(surface_index):
     R = np.array(r)
     G = np.array(g)
     B = np.array(b)
+
     print('for R')
     show_param(R)
-
     print('for G')
     show_param(G)
-
     print('for B')
     show_param(B)
 
-    plt.hist(R)
-    plt.show()
+    visualize_data(R)
 
 
 def show_param(x):
@@ -89,5 +87,27 @@ def show_param(x):
     print('scale')
     print(x.max() - x.min())
 
+def visualize_data(data):
+    # ヒストグラム
+    plt.figure(figsize=(10, 6))
+    plt.hist(data, bins=10000, edgecolor='k')
+    plt.title('Histogram')
+    plt.show()
+
+    # KDE
+    plt.figure(figsize=(10, 6))
+    sns.kdeplot(data)
+    plt.title('Kernel Density Estimate')
+    plt.show()
+
+    # ボックスプロット
+    plt.figure(figsize=(10, 6))
+    sns.boxplot(data)
+    plt.title('Box Plot')
+    plt.show()
+
 
 genRGBHist(0)
+
+
+
