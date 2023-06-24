@@ -72,7 +72,7 @@ def genRGBHist(surface_index):
     print('for B')
     show_param(B)
 
-    visualize_data(R, file)
+    visualize_data(R, G, B, file)
 
 
 def show_param(x):
@@ -88,22 +88,27 @@ def show_param(x):
     print('scale')
     print(x.max() - x.min())
 
-def visualize_data(data, title):
+def visualize_data(R_data, G_data, B_data, title):
     # ヒストグラム
     plt.figure(figsize=(10, 6))
-    plt.hist(data, bins=100, edgecolor='k')
+    sns.histplot(R_data, color='red', bins=100)
+    sns.histplot(G_data, color='green', bins=100)
+    sns.histplot(B_data, color='blue', bins=100)
+    # plt.hist(R_data, color='red', bins=100, edgecolor='k')
+    # plt.hist(G_data, color='green', bins=100, edgecolor='k')
+    # plt.hist(B_data, color='blue', bins=100, edgecolor='k')
     plt.title('Histogram ' + title)
     plt.savefig('./visualize/hist/' + title + '.png')
 
     # KDE
     plt.figure(figsize=(10, 6))
-    sns.kdeplot(data)
+    sns.kdeplot(R_data)
     plt.title('Kernel Density Estimate ' + title)
     plt.savefig('./visualize/kde/' + title + '.png')
 
     # ボックスプロット
     plt.figure(figsize=(10, 6))
-    sns.boxplot(data)
+    sns.boxplot(R_data)
     plt.title('Box Plot ' + title)
     plt.savefig('./visualize/box/' + title + '.png')
 

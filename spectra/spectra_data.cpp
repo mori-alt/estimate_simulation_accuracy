@@ -501,9 +501,9 @@ void convertSpectraData2RGB( Eigen::Vector3d& out_RGB, const int in_NumSpect, co
 
     // normalize 0 - 255 to output pdf with python
     // todo normalize cancel and make hist
-    out_RGB.x() = std::min<double>( 255, r );//R;//1.0 - exp(-R*exposure);
-    out_RGB.y() = std::min<double>( 255, g );//G;//1.0 - exp(-G*exposure);
-    out_RGB.z() = std::min<double>( 255, b );//B;//1.0 - exp(-B*exposure);
+//    out_RGB.x() = std::min<double>( 255, r );//R;//1.0 - exp(-R*exposure);
+//    out_RGB.y() = std::min<double>( 255, g );//G;//1.0 - exp(-G*exposure);
+//    out_RGB.z() = std::min<double>( 255, b );//B;//1.0 - exp(-B*exposure);
 
 //    out_RGB.x() = std::max<double>( 0.0, r );//R;//1.0 - exp(-R*exposure);
 //    out_RGB.y() = std::max<double>( 0.0, g );//G;//1.0 - exp(-G*exposure);
