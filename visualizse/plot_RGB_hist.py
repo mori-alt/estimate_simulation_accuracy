@@ -72,17 +72,31 @@ def genRGBHist(surface_index):
 
 
 # 構造毎のRGBの最大値と最小値を求める
-def getRGBMax(surface_index):
-    print('get max RGB in ' + str(surface_index))
-    n = 2 + 5 * surface_index
+def getRGBMax():
+    max_values = np.zeros(48)
+    for i in range(48):
+        surface_index = i
+        print('get max RGB in ' + str(surface_index))
+        n = 2 + 5 * surface_index
+        _max = 0
 
-    # 全てのファイルを読み込む (表面構造毎に処理を行う)
-    for movie_num in range(len(files)):
-        d = pd.read_csv(files[movie_num], header=7)
+        # 全てのファイルを読み込む (表面構造毎に処理を行う)
+        for movie_num in range(len(files)):
+            d = pd.read_csv(files[movie_num], header=7)
 
-        # get RGB
-        C = np.array([d.iloc[:, n + 2].values, d.iloc[:, n + 3].values, d.iloc[:, n + 4].values]) / 255.0
-        C = C.transpose()
+            # get RGB
+            C = np.array([d.iloc[:, n + 2].values, d.iloc[:, n + 3].values, d.iloc[:, n + 4].values])
+            C = C.transpose()
+            max_value = np.max(C)
+            final_value = max(max_value, _max)
+
+        max_values[i] = final_value
+
+    sns.lineplot(data=max_values)
+    plt.savefig('max_lineplot.png')
+    return max_values
+
+
 
 
 
@@ -126,8 +140,10 @@ def visualize_data(R_data, G_data, B_data, title):
     plt.savefig('./visualize/box/' + title + '.png')
 
 
-for i in range(48):
-    genRGBHist(i)
+# for i in range(48):
+#     genRGBHist(i)
 
+
+getRGBMax()
 
 
