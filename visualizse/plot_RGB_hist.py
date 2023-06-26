@@ -7,7 +7,7 @@ import glob
 import csv
 import seaborn as sns
 
-# データの一覧取得
+# get data
 files = glob.glob('../cmake-build-release/output_csv/*')
 files = [x.replace('\\', '/') for x in files]
 
@@ -22,10 +22,10 @@ for file in files:
 # get header
 names = data_list[3].columns.values
 
-# set page config
-st.set_page_config(layout="wide")
 
 def genRGBHist(surface_index):
+    # set page config
+    st.set_page_config(layout="wide")
     print('write ' + str(surface_index) + ' surface index')
     r = []
     g = []
@@ -43,12 +43,8 @@ def genRGBHist(surface_index):
     for movie_num in range(len(files)):
         d = pd.read_csv(files[movie_num], header=7)
 
-        with open(files[movie_num], 'r') as file:
-            reader = csv.reader(file)
-            data = [row[1] for idx, row in enumerate(reader) if idx == 3]
-
         # get RGB
-        C = np.array([d.iloc[:, n + 2].values, d.iloc[:, n + 3].values, d.iloc[:, n + 4].values]) / 255.0
+        C = np.array([d.iloc[:, n + 2].values, d.iloc[:, n + 3].values, d.iloc[:, n + 4].values])
         C = C.transpose()
 
         for rgb in C:
@@ -75,6 +71,24 @@ def genRGBHist(surface_index):
     visualize_data(R, G, B, file)
 
 
+# 構造毎のRGBの最大値と最小値を求める
+def getRGBMax(surface_index):
+    print('get max RGB in ' + str(surface_index))
+    n = 2 + 5 * surface_index
+
+    # 全てのファイルを読み込む (表面構造毎に処理を行う)
+    for movie_num in range(len(files)):
+        d = pd.read_csv(files[movie_num], header=7)
+
+        # get RGB
+        C = np.array([d.iloc[:, n + 2].values, d.iloc[:, n + 3].values, d.iloc[:, n + 4].values]) / 255.0
+        C = C.transpose()
+
+
+
+
+
+
 def show_param(x):
     print('size')
     print(x.size)
@@ -87,6 +101,7 @@ def show_param(x):
 
     print('scale')
     print(x.max() - x.min())
+
 
 def visualize_data(R_data, G_data, B_data, title):
     # ヒストグラム
@@ -109,7 +124,6 @@ def visualize_data(R_data, G_data, B_data, title):
     sns.boxplot(R_data)
     plt.title('Box Plot ' + title)
     plt.savefig('./visualize/box/' + title + '.png')
-
 
 
 for i in range(48):
