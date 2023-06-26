@@ -94,9 +94,7 @@ def visualize_data(R_data, G_data, B_data, title):
     sns.histplot(R_data, color='red', bins=100)
     sns.histplot(G_data, color='green', bins=100)
     sns.histplot(B_data, color='blue', bins=100)
-    # plt.hist(R_data, color='red', bins=100, edgecolor='k')
-    # plt.hist(G_data, color='green', bins=100, edgecolor='k')
-    # plt.hist(B_data, color='blue', bins=100, edgecolor='k')
+
     plt.title('Histogram ' + title)
     plt.savefig('./visualize/hist/' + title + '.png')
 
