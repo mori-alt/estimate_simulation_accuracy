@@ -78,7 +78,7 @@ def getRGBMax():
         surface_index = i
         print('get max RGB in ' + str(surface_index))
         n = 2 + 5 * surface_index
-        _max = 0
+        max_value = 0
 
         # 全てのファイルを読み込む (表面構造毎に処理を行う)
         for movie_num in range(len(files)):
@@ -88,14 +88,11 @@ def getRGBMax():
             C = np.array([d.iloc[:, n + 2].values, d.iloc[:, n + 3].values, d.iloc[:, n + 4].values])
             C = C.transpose()
 
-            max_r = np.max(C[0])
-            max_g = np.max(C[1])
-            max_b = np.max(C[2])
+            max_value = max(max_value, np.max(C))
+            if i == 20:
+                print(max_value)
 
-            max_value = np.max(C)
-            final_value = max(max_value, _max)
-
-        max_values[i] = final_value
+        max_values[i] = max_value
 
     print('all max values')
     print(max_values)
@@ -129,6 +126,7 @@ def plotRGBDistributionHeatmap():
             C = C.transpose()
 
             for c in C:
+                # round to int
                 r = int(c[0])
                 g = int(c[1])
                 b = int(c[2])
@@ -187,7 +185,7 @@ def visualize_data(R_data, G_data, B_data, title):
 #     genRGBHist(i)
 
 
-# getRGBMax()
-plotRGBDistributionHeatmap()
+getRGBMax()
+# plotRGBDistributionHeatmap()
 
 
