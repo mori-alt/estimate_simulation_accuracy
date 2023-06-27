@@ -87,20 +87,62 @@ def getRGBMax():
             # get RGB
             C = np.array([d.iloc[:, n + 2].values, d.iloc[:, n + 3].values, d.iloc[:, n + 4].values])
             C = C.transpose()
+
+            max_r = np.max(C[0])
+            max_g = np.max(C[1])
+            max_b = np.max(C[2])
+
             max_value = np.max(C)
             final_value = max(max_value, _max)
 
         max_values[i] = final_value
 
+    print('all max values')
+    print(max_values)
+
+    print('max RGB')
+    print(np.max(max_values))
     sns.lineplot(data=max_values)
     plt.savefig('max_lineplot.png')
+
     return max_values
 
+def plotRGBDistributionHeatmap():
+    print('plot heatmap')
+    distribution_max = 25
+    divide_num = 255
+    distribution = np.zeros((48, divide_num))
+    mask_index = 5
 
+    # each surface
+    for i in range(48):
+        surface_index = i
+        n = 2 + 5 * surface_index
+        print(i)
 
+        # each file
+        for movie_num in range(len(files)):
+            d = pd.read_csv(files[movie_num], header=7)
 
+            # get RGB
+            C = np.array([d.iloc[:, n + 2].values, d.iloc[:, n + 3].values, d.iloc[:, n + 4].values])
+            C = C.transpose()
 
+            for c in C:
+                r = int(c[0])
+                g = int(c[1])
+                b = int(c[2])
 
+                distribution[i][r] = 1 + distribution[i][r]
+                distribution[i][b] = 1 + distribution[i][b]
+                distribution[i][g] = 1 + distribution[i][g]
+
+                distribution[i][:mask_index] = 0
+                distribution[i][:mask_index] = 0
+                distribution[i][:mask_index] = 0
+
+    sns.heatmap(distribution)
+    plt.savefig(str(mask_index) + '_masked_RGB_distribution.png')
 
 
 def show_param(x):
@@ -140,10 +182,12 @@ def visualize_data(R_data, G_data, B_data, title):
     plt.savefig('./visualize/box/' + title + '.png')
 
 
+# make hist kde box
 # for i in range(48):
 #     genRGBHist(i)
 
 
-getRGBMax()
+# getRGBMax()
+plotRGBDistributionHeatmap()
 
 
