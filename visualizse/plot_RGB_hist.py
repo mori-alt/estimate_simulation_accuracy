@@ -8,7 +8,7 @@ import csv
 import seaborn as sns
 
 # get data
-files = glob.glob('../cmake-build-release/output_csv/*')
+files = glob.glob('../cmake-build-release/output_csv_hist/*')
 files = [x.replace('\\', '/') for x in files]
 
 print('input these files')
@@ -89,8 +89,6 @@ def getRGBMax():
             C = C.transpose()
 
             max_value = max(max_value, np.max(C))
-            if i == 20:
-                print(max_value)
 
         max_values[i] = max_value
 
@@ -100,7 +98,7 @@ def getRGBMax():
     print('max RGB')
     print(np.max(max_values))
     sns.lineplot(data=max_values)
-    plt.savefig('max_lineplot.png')
+    plt.savefig('./visualize/distribution/max_lineplot.png')
 
     return max_values
 
@@ -140,7 +138,41 @@ def plotRGBDistributionHeatmap():
                 distribution[i][:mask_index] = 0
 
     sns.heatmap(distribution)
-    plt.savefig('./distribution/' + str(mask_index) + '_masked_RGB_distribution.png')
+    plt.savefig('./visualize/distribution/' + str(mask_index) + '_masked_RGB_distribution.png')
+
+def plot01RGBDistributionHeatmap():
+    print('plot heatmap')
+    distribution_max = 25
+    divide_num = 255
+    distribution = np.zeros((48, divide_num))
+
+    # each surface
+    for i in range(48):
+        surface_index = i
+        n = 2 + 5 * surface_index
+        print(i)
+
+        # each file
+        for movie_num in range(len(files)):
+            d = pd.read_csv(files[movie_num], header=7)
+
+            # get RGB
+            C = np.array([d.iloc[:, n + 2].values, d.iloc[:, n + 3].values, d.iloc[:, n + 4].values])
+            C = C.transpose()
+
+            for c in C:
+                # round to int
+                r = int(c[0])
+                g = int(c[1])
+                b = int(c[2])
+
+                distribution[i][r] = 1
+                distribution[i][b] = 1
+                distribution[i][g] = 1
+
+
+    sns.heatmap(distribution)
+    plt.savefig('./visualize/distribution/RGB_distribution.png')
 
 
 def show_param(x):
@@ -185,7 +217,7 @@ def visualize_data(R_data, G_data, B_data, title):
 #     genRGBHist(i)
 
 
-getRGBMax()
-# plotRGBDistributionHeatmap()
-
+# getRGBMax()
+plotRGBDistributionHeatmap()
+# plot01RGBDistributionHeatmap()
 
