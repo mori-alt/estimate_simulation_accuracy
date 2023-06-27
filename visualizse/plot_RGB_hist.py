@@ -140,7 +140,7 @@ def plotRGBDistributionHeatmap():
                 distribution[i][:mask_index] = 0
 
     sns.heatmap(distribution)
-    plt.savefig(str(mask_index) + '_masked_RGB_distribution.png')
+    plt.savefig('./distribution/' + str(mask_index) + '_masked_RGB_distribution.png')
 
 
 def show_param(x):
