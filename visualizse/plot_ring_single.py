@@ -8,7 +8,7 @@ import csv
 
 # データの一覧取得
 # files = glob.glob('../cmake-build-release/csv/*')
-files = glob.glob('../cmake-build-release/output_csv/*')
+files = glob.glob('../cmake-build-release/output_csv_6_27/*')
 files = [x.replace('\\', '/') for x in files]
 print(files)
 
@@ -28,6 +28,7 @@ names = data.columns.values
 # 読み込んだcsvをpdfにして出力
 # １つの構造について，円を１種類だけ出力する
 def plot_one_circle(flat_idx):
+    print('plot ' + str(flat_idx) + ' circle')
     fig1 = plt.figure()
 
     point_thickness = 10
@@ -71,9 +72,9 @@ def plot_one_circle(flat_idx):
 
 
     st.write(fig1)
-    # plt.show()
     _output_file_name = str(int(names[n][3:7])) + 'nm_' + str(int(names[n][10:12])) + '_' + str(int(names[n][17:20])) + 'nm'
-    plt.savefig('./single/png/' + _output_file_name + '.png')
+    print('output ' + _output_file_name)
+    plt.savefig('./single/6_27_png/' + _output_file_name + '.png')
 
 for i in range(75):
     plot_one_circle(i)

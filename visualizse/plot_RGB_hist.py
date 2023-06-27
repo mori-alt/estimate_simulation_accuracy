@@ -8,7 +8,7 @@ import csv
 import seaborn as sns
 
 # get data
-files = glob.glob('../cmake-build-release/output_csv_hist/*')
+files = glob.glob('../cmake-build-release/output_csv_6_27/*')
 files = [x.replace('\\', '/') for x in files]
 
 print('input these files')
@@ -98,7 +98,8 @@ def getRGBMax():
     print('max RGB')
     print(np.max(max_values))
     sns.lineplot(data=max_values)
-    plt.savefig('./visualize/distribution/max_lineplot.png')
+    plt.show()
+    # plt.savefig('./visualize/distribution/max_lineplot.png')
 
     return max_values
 
@@ -217,7 +218,7 @@ def visualize_data(R_data, G_data, B_data, title):
 #     genRGBHist(i)
 
 
-# getRGBMax()
-plotRGBDistributionHeatmap()
+getRGBMax()
+# plotRGBDistributionHeatmap()
 # plot01RGBDistributionHeatmap()
 
