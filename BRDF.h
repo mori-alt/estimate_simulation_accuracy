@@ -70,7 +70,6 @@ public:
         const auto A = amplitude * 1.0e-9;
         const auto L = pitch * 1.0e-9;
         const auto c = 50 * 1.0e-6;
-//        const auto c = 1.0;
 
         const Eigen::Vector3d dh_bar = ( in_dl + in_dv ) * 0.5;
 
@@ -102,7 +101,7 @@ public:
         }
     }
 
-    static void set_out_RGB(std::vector<Eigen::Vector3d>& out_RGB, const int loop_num, const std::vector<Eigen::Vector3d>& spectra2XYZ_conversion, const std::vector<std::array<double, 16>>& accumulation_spectra) {
+    static void  set_out_RGB(std::vector<Eigen::Vector3d>& out_RGB, const int loop_num, const std::vector<Eigen::Vector3d>& spectra2XYZ_conversion, const std::vector<std::array<double, 16>>& accumulation_spectra) {
         for(auto spectra : accumulation_spectra) {
             Eigen::Vector3d rgb = Eigen::Vector3d::Zero();
             convertSpectraData2RGB(rgb, NSPECT, spectra2XYZ_conversion, spectra, light_intensity / loop_num);
