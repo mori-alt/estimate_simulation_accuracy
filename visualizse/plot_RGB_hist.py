@@ -8,7 +8,7 @@ import csv
 import seaborn as sns
 
 # get data
-files = glob.glob('../cmake-build-release/output_csv_6_27/*')
+files = glob.glob('../cmake-build-release/output_csv_20/*')
 files = [x.replace('\\', '/') for x in files]
 
 print('input these files')
@@ -98,14 +98,14 @@ def getRGBMax():
     print('max RGB')
     print(np.max(max_values))
     sns.lineplot(data=max_values)
-    plt.show()
-    # plt.savefig('./visualize/distribution/max_lineplot.png')
+    plt.title('MAX_RGB : ' + str(np.max(max_values)))
+    # plt.show()
+    plt.savefig('./visualize/distribution/max_lineplot.png')
 
     return max_values
 
 def plotRGBDistributionHeatmap():
     print('plot heatmap')
-    distribution_max = 25
     divide_num = 255
     distribution = np.zeros((48, divide_num))
     mask_index = 5
@@ -173,7 +173,7 @@ def plot01RGBDistributionHeatmap():
 
 
     sns.heatmap(distribution)
-    plt.savefig('./visualize/distribution/RGB_distribution.png')
+    plt.savefig('./visualize/distribution/01RGB_distribution.png')
 
 
 def show_param(x):
