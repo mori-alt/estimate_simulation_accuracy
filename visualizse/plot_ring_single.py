@@ -5,6 +5,7 @@ import numpy as np
 import math
 import glob
 import csv
+import os
 
 # データの一覧取得
 # files = glob.glob('../cmake-build-release/csv/*')
@@ -77,7 +78,7 @@ def plot_one_circle(flat_idx):
     plt.savefig('./single/6_27_png/' + _output_file_name + '.png')
 
 # ringをマスク処理を掛けながら表示すること
-def masked_plot_one_circle(flat_idx):
+def masked_plot_one_circle(flat_idx, max_point):
     print('plot ' + str(flat_idx) + ' circle')
     fig1 = plt.figure()
 
