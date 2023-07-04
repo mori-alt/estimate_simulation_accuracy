@@ -5,11 +5,11 @@ import numpy as np
 import math
 import glob
 import csv
-import os
+import pathlib
 
 # データの一覧取得
-# files = glob.glob('../cmake-build-release/csv/*')
-files = glob.glob('../cmake-build-release/output_csv_6_27/*')
+read_dir_name = '20'
+files = glob.glob('../cmake-build-release/output_csv_' + read_dir_name + '/*')
 files = [x.replace('\\', '/') for x in files]
 print(files)
 
@@ -71,11 +71,12 @@ def plot_one_circle(flat_idx):
     _name = str(int(names[n][3:7])) + 'nm/' + str(int(names[n][10:12])) + '/' + str(int(names[n][17:20])) + 'nm'
     ax.set_title(_name, fontsize=4)
 
-
     st.write(fig1)
     _output_file_name = str(int(names[n][3:7])) + 'nm_' + str(int(names[n][10:12])) + '_' + str(int(names[n][17:20])) + 'nm'
     print('output ' + _output_file_name)
-    plt.savefig('./single/6_27_png/' + _output_file_name + '.png')
+    pathlib.Path('./single/' + read_dir_name + '_png').mkdir(exist_ok=True)
+    plt.savefig('./single/' + read_dir_name + '_png/' + _output_file_name + '.png')
+
 
 # ringをマスク処理を掛けながら表示すること
 def masked_plot_one_circle(flat_idx, max_point):
@@ -104,8 +105,22 @@ def masked_plot_one_circle(flat_idx, max_point):
         camera_theta = float(data[0])
         range_scale = camera_theta / 90
         # RGBデータの取得
-        C = np.array([d.iloc[:, n + 2].values, d.iloc[:, n + 3].values, d.iloc[:, n + 4].values]) / 255.0
+        C = np.array([d.iloc[:, n + 2].values, d.iloc[:, n + 3].values, d.iloc[:, n + 4].values]) / max_point
         C = C.transpose()
+
+        # update rgb over 1.0 to 0.0
+        for c in C:
+            if c[0] > 1.:
+                c[0] = 0
+                print('c[0] is over 1.0')
+
+            if c[1] > 1.:
+                c[1] = 0.
+                print('c[1] is over 1.0')
+
+            if c[2] > 1.:
+                c[2] = 0.
+                print('c[2] is over 1.0')
 
         # 角度を計算する
         theta = np.radians(d.iloc[:, n].values)
@@ -118,14 +133,16 @@ def masked_plot_one_circle(flat_idx, max_point):
     ax.axes.yaxis.set_visible(False)
 
     # タイトルの作成
-    _name = str(int(names[n][3:7])) + 'nm/' + str(int(names[n][10:12])) + '/' + str(int(names[n][17:20])) + 'nm'
+    _name = str(int(names[n][3:7])) + 'nm/' + str(int(names[n][10:12])) + '/' + str(int(names[n][17:20])) + 'nm / max index: ' + str(max_point)
     ax.set_title(_name, fontsize=4)
 
 
     st.write(fig1)
     _output_file_name = str(int(names[n][3:7])) + 'nm_' + str(int(names[n][10:12])) + '_' + str(int(names[n][17:20])) + 'nm'
     print('output ' + _output_file_name)
-    plt.savefig('./single/6_27_png/' + _output_file_name + '.png')
+    pathlib.Path('./single/max_index_' + str(max_point) + '_' + read_dir_name + '_png').mkdir(exist_ok=True)
+    plt.savefig('./single/max_index_' + str(max_point) + '_' + read_dir_name + '_png/' + _output_file_name + '.png')
 
-for i in range(75):
-    plot_one_circle(i)
+
+for i in range(48):
+    masked_plot_one_circle(i, 50)
