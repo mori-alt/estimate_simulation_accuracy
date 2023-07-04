@@ -145,4 +145,4 @@ def masked_plot_one_circle(flat_idx, max_point):
 
 
 for i in range(48):
-    masked_plot_one_circle(i, 50)
+    masked_plot_one_circle(i, 10)
